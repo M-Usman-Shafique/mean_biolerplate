@@ -1,0 +1,25 @@
+@use '@angular/material' as mat;
+@use "tailwindcss";
+
+.dark {
+  color-scheme: dark;
+}
+
+html, body { 
+  height: 100%; 
+}
+
+body {
+  margin: 0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif; 
+}
+
+//  Remove the following styles if not using TailwindCSS
+
+.mdc-notched-outline_notch {
+  border-style: none;
+}
+
+.mat-mdc-icon-button {
+  line-height: normal;
+}

@@ -1,0 +1,90 @@
+/* core theme tokens are generating sys css variables, hence making aliases below: */
+$alias-map: (
+  // === Primary Colors === //
+  primary: --mat-sys-primary,
+  on-primary: --mat-sys-on-primary,
+  primary-container: --mat-sys-primary-container,
+  on-primary-container: --mat-sys-on-primary-container,
+  inverse-primary: --mat-sys-inverse-primary,
+  primary-fixed: --mat-sys-primary-fixed,
+  primary-fixed-dim: --mat-sys-primary-fixed-dim,
+  on-primary-fixed: --mat-sys-on-primary-fixed,
+  on-primary-fixed-variant: --mat-sys-on-primary-fixed-variant,
+
+  // === Secondary Colors === //
+  secondary: --mat-sys-secondary,
+  on-secondary: --mat-sys-on-secondary,
+  secondary-container: --mat-sys-secondary-container,
+  on-secondary-container: --mat-sys-on-secondary-container,
+  secondary-fixed: --mat-sys-secondary-fixed,
+  secondary-fixed-dim: --mat-sys-secondary-fixed-dim,
+  on-secondary-fixed: --mat-sys-on-secondary-fixed,
+  on-secondary-fixed-variant: --mat-sys-on-secondary-fixed-variant,
+
+  // === Tertiary Colors === //
+  tertiary: --mat-sys-tertiary,
+  on-tertiary: --mat-sys-on-tertiary,
+  tertiary-container: --mat-sys-tertiary-container,
+  on-tertiary-container: --mat-sys-on-tertiary-container,
+  tertiary-fixed: --mat-sys-tertiary-fixed,
+  tertiary-fixed-dim: --mat-sys-tertiary-fixed-dim,
+  on-tertiary-fixed: --mat-sys-on-tertiary-fixed,
+  on-tertiary-fixed-variant: --mat-sys-on-tertiary-fixed-variant,
+
+  // === Background & Surface === //
+  background: --mat-sys-background,
+  on-background: --mat-sys-on-background,
+  surface: --mat-sys-surface,
+  surface-dim: --mat-sys-surface-dim,
+  surface-bright: --mat-sys-surface-bright,
+  surface-container-lowest: --mat-sys-surface-container-lowest,
+  surface-container-low: --mat-sys-surface-container-low,
+  surface-container: --mat-sys-surface-container,
+  surface-container-high: --mat-sys-surface-container-high,
+  surface-container-highest: --mat-sys-surface-container-highest,
+  on-surface: --mat-sys-on-surface,
+
+  // === Other === //
+  shadow: --mat-sys-shadow,
+  scrim: --mat-sys-scrim,
+  surface-tint: --mat-sys-surface-tint,
+  inverse-surface: --mat-sys-inverse-surface,
+  inverse-on-surface: --mat-sys-inverse-on-surface,
+  outline: --mat-sys-outline,
+  outline-variant: --mat-sys-outline-variant,
+
+  // === Error & Neutral === //
+  neutral: --mat-sys-neutral,
+  neutral10: --mat-sys-neutral10,
+  error: --mat-sys-error,
+  error-container: --mat-sys-error-container,
+  on-error: --mat-sys-on-error,
+  on-error-container: --mat-sys-on-error-container,
+
+  // === Variants === //
+  surface-variant: --mat-sys-surface-variant,
+  on-surface-variant: --mat-sys-on-surface-variant,
+  neutral-variant: --mat-sys-neutral-variant,
+  neutral-variant20: --mat-sys-neutral-variant20,
+
+  // === Inverse Colors === //
+  inverse-secondary: --mat-sys-inverse-secondary,
+  inverse-tertiary: --mat-sys-inverse-tertiary
+);
+
+
+/* Light Theme */
+
+:root, :host {
+  @each $alias, $sys-var in $alias-map {
+    --#{$alias}: var(#{$sys-var});
+  }
+}
+
+/* Dark Theme */
+
+.dark {
+  @each $alias, $sys-var in $alias-map {
+    --#{$alias}: var(#{$sys-var});
+  }
+}
