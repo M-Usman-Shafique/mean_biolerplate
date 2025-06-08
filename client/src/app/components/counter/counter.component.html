@@ -1,0 +1,10 @@
+<div class="flex items-center gap-4">
+    <button mat-mini-fab (click)="onIncrement()">
+        <mat-icon>add</mat-icon>
+    </button>
+    <h2 class="text-bold text-xl">{{ counter() }}</h2>
+    <button mat-mini-fab (click)="onDecrement()">
+        <mat-icon>remove</mat-icon>
+    </button>
+    <button mat-stroked-button (click)="onReset()">Reset</button>
+</div>

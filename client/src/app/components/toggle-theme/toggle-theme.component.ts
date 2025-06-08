@@ -1,3 +1,4 @@
+// src/app/components/toggle-theme/toggle-theme.component.ts
 import { Component, inject } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { ThemeService } from "../../services/theme.service";

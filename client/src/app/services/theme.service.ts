@@ -1,4 +1,4 @@
-// theme.service.ts
+// src/app/services/theme.service.ts
 import { DOCUMENT } from "@angular/common";
 import { inject, Injectable, signal } from "@angular/core";
 
@@ -11,7 +11,7 @@ export class ThemeService {
     readonly currentTheme = this.currentThemeSignal.asReadonly();
 
     constructor() {
-        this.setTheme(this.getStoredTheme() || "light");
+        this.setTheme(this.getStoredTheme());
     }
 
     toggleTheme() {
@@ -21,13 +21,7 @@ export class ThemeService {
 
     setTheme(theme: Theme) {
         this.currentThemeSignal.set(theme);
-
-        if (theme === "dark") {
-            this.document.documentElement.classList.toggle("dark");
-        } else {
-            this.document.documentElement.classList.toggle("dark");
-        }
-
+        this.document.documentElement.classList.toggle("dark", theme === "dark");
         this.storeTheme(theme);
     }
 
@@ -35,8 +29,8 @@ export class ThemeService {
         localStorage.setItem("preferred-theme", theme);
     }
 
-    private getStoredTheme(): Theme | null {
+    private getStoredTheme(): Theme {
         const stored = localStorage.getItem("preferred-theme");
-        return stored === "dark" || stored === "light" ? stored : null;
+        return stored === "dark" || stored === "light" ? stored : "light";
     }
 }

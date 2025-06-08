@@ -1,7 +1,5 @@
-<button mat-icon-button (click)="themeService.toggleTheme()" aria-label="theme toggle">
-    @if (themeService.currentTheme() === "light") {
-        <span class="material-icons [color:var(--primary)]">bedtime</span>
-    } @else {
-        <span class="material-icons-outlined [color:var(--primary)]">light_mode</span>
-    }
+<button mat-icon-button (click)="themeService.toggleTheme()" aria-label="Toggle theme">
+    <mat-icon class="![color:var(--primary)]">
+        {{ themeService.currentTheme() === "light" ? "light_mode" : "bedtime" }}
+    </mat-icon>
 </button>
