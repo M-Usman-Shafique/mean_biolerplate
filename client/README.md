@@ -5,6 +5,8 @@
 - By default tailwindcss classes have low priority as compared to default material styling. You can use a "!" sign before tailwindcss classes to give them high priority.
 Example: class="!flex items-center justify-center"
 - Style Aliases
+- Theme builder
+- 
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.0.
 
