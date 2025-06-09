@@ -1,14 +1,16 @@
 import { Component } from "@angular/core";
 import { RouterModule, RouterOutlet } from "@angular/router";
-import { NavbarComponent } from "./components/navbar/navbar.component";
-import { Footer } from "./components/footer/footer.component";
+import { ThemeService } from "./core/services/theme.service";
 
 @Component({
     selector: "app-root",
-    imports: [RouterOutlet, RouterModule, NavbarComponent, Footer],
+    imports: [RouterOutlet, RouterModule],
     templateUrl: "./app.component.html",
     styleUrl: "./app.component.scss",
 })
 export class AppComponent {
     protected title = "Softaims";
+
+    // Ensures theme initialization for all routes, including not-found and lazy loaded pages:
+    constructor(private themeService: ThemeService) {}
 }

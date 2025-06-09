@@ -3,9 +3,12 @@
         <div class="left-side">
             <h1>{{ title }}</h1>
             <p>Congratulations! Your app is running. 🎉</p>
-            <div class="mt-8">
-                <!-- <button mat-flat-button [routerLink]="'/counter'">Get Started</button> -->
+            <div class="my-8">
                 <app-counter />
+            </div>
+            <div class="flex items-center gap-5">
+                <button mat-flat-button [routerLink]="'/dashboard'">Dashboard</button>
+                <button mat-flat-button [routerLink]="'/profile'">Profile</button>
             </div>
         </div>
         <div class="divider" role="separator" aria-label="Divider"></div>
