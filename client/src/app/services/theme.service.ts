@@ -1,55 +1,58 @@
-// src/app/services/theme.service.ts
-import { DOCUMENT } from "@angular/common";
-import { inject, Injectable, signal } from "@angular/core";
+import { Injectable, computed, effect, signal } from "@angular/core";
+
+export interface ThemeOption {
+    name: Theme;
+    icon: string;
+}
 
 export type Theme = "dark" | "light" | "system";
 
-@Injectable({ providedIn: "root" })
+const validThemes: Theme[] = ["light", "dark", "system"];
+
+@Injectable({
+    providedIn: "root",
+})
 export class ThemeService {
-    private readonly document = inject(DOCUMENT);
-    private readonly currentThemeSignal = signal<Theme>(this.getTheme());
-    readonly currentTheme = this.currentThemeSignal.asReadonly();
+    private readonly currentTheme = signal<Theme>("system");
 
-    constructor() {
-        this.applyTheme();
-        window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => {
-            if (this.currentThemeSignal() === "system") {
-                this.applyTheme();
-            }
-        });
-    }
+    private readonly themes: ThemeOption[] = [
+        { name: "light", icon: "light_mode" },
+        { name: "dark", icon: "bedtime" },
+        { name: "system", icon: "computer" },
+    ];
 
-    toggleTheme() {
-        const current = this.currentThemeSignal();
-        const newTheme = current === "light" ? "dark" : current === "dark" ? "system" : "light";
-        this.setTheme(newTheme);
+    readonly selectedTheme = computed(() =>
+        this.themes.find((t) => t.name === this.currentTheme())
+    );
+
+    getThemes(): ThemeOption[] {
+        return this.themes;
     }
 
     setTheme(theme: Theme) {
-        this.currentThemeSignal.set(theme);
-        this.storeTheme(theme);
-        this.applyTheme();
+        localStorage.setItem("prefered-theme", theme);
+        this.currentTheme.set(theme);
     }
 
-    private applyTheme() {
-        const theme = this.currentThemeSignal();
-        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-        debugger;
-
-        const isDark = theme === "dark" || (theme === "system" && prefersDark);
-
-        this.document.documentElement.classList.remove("dark");
-        if (isDark) {
-            this.document.documentElement.classList.add("dark");
+    constructor() {
+        const savedTheme = localStorage.getItem("prefered-theme");
+        if (this.isValidTheme(savedTheme)) {
+            this.currentTheme.set(savedTheme);
         }
+
+        effect(() => {
+            const theme = this.currentTheme();
+            const body = document.body;
+
+            body.classList.remove(...validThemes);
+            body.classList.add(theme);
+
+            const colorScheme = theme === "system" ? "light dark" : theme;
+            body.style.setProperty("color-scheme", colorScheme);
+        });
     }
 
-    private storeTheme(theme: Theme) {
-        localStorage.setItem("preferred-theme", theme);
-    }
-
-    private getTheme(): Theme {
-        const stored = localStorage.getItem("preferred-theme");
-        return stored === "dark" || stored === "light" || stored === "system" ? stored : "light";
+    private isValidTheme(value: any): value is Theme {
+        return validThemes.includes(value);
     }
 }
