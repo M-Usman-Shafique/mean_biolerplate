@@ -9,7 +9,7 @@ import { ThemeService } from "./core/services/theme.service";
     styleUrl: "./app.component.scss",
 })
 export class AppComponent {
-    protected title = "Softaims";
+    readonly title = "Softaims";
 
     // Ensures theme initialization for all routes, including not-found and lazy loaded pages:
     constructor(private themeService: ThemeService) {}
