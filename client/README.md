@@ -9,6 +9,9 @@ Example: class="!flex items-center justify-center"
 - ngrx/store
 - Lazy loading
 - Environment
+- Loadash, day.js
+- RoutesConfig
+- ApiService Layer
 - 
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.0.
