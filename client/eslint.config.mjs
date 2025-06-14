@@ -1,17 +1,20 @@
 import js from "@eslint/js";
 import globals from "globals";
+import { defineConfig } from "eslint/config";
 import tseslint from "typescript-eslint";
 import eslintPluginPrettier from "eslint-plugin-prettier";
-import prettierConfig from "eslint-config-prettier";
+import eslintConfigPrettier from "eslint-config-prettier";
 import angular from "@angular-eslint/eslint-plugin";
 import angularTemplate from "@angular-eslint/eslint-plugin-template";
 import angularTemplateParser from "@angular-eslint/template-parser";
-import { defineConfig } from "eslint/config";
 
 export default defineConfig([
     {
+        ignores: [".angular/**", "dist/**", "node_modules/**", "coverage/**"],
+    },
+    {
         files: ["**/*.{ts,js}"],
-        ignores: ["**/*.spec.ts", ".angular/**", "dist/**", "node_modules/**", "coverage/**"],
+        ignores: ["**/*.spec.ts"],
         languageOptions: {
             parser: tseslint.parser,
             parserOptions: {
@@ -30,11 +33,11 @@ export default defineConfig([
             ...js.configs.recommended.rules,
             ...tseslint.configs.recommended.rules,
             ...angular.configs.recommended.rules,
-            ...prettierConfig.rules,
+            ...eslintConfigPrettier.rules,
+            "prettier/prettier": "warn",
             "no-console": "warn",
             "no-unused-vars": "off",
-            "@typescript-eslint/no-unused-vars": "warn",
-            "prettier/prettier": "warn",
+            "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
         },
     },
     {

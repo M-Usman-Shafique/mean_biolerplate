@@ -6,13 +6,15 @@
 Example: class="!flex items-center justify-center"
 - Style Aliases
 - Theme builder
+- npm run eslint
 - ngrx/store
 - Lazy loading
 - Environment
 - Loadash, day.js
 - RoutesConfig
 - ApiService Layer
-- 
+- --legacy-peer-deps
+-
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.0.
 

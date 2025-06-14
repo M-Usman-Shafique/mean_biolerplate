@@ -1,5 +1,5 @@
 export const environment = {
     production: true,
-    apiUrl: 'https://yourdomain.com',
-    featureFlag: false
-  };
+    apiUrl: "https://yourdomain.com",
+    featureFlag: false,
+};
