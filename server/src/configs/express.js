@@ -1,22 +1,28 @@
-import dotenv from "dotenv";
+import { NODE_ENV, PORT, CLIENT_URL } from "./config.js";
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
 import { errorHandler } from "../middlewares/errorHandler.middleware.js";
-
-dotenv.config({ path: "./.env" });
+import routes from "../routes/router.js";
+import asyncHandler from "express-async-handler";
 
 const app = express();
 
-app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
+app.use(cors({ origin: CLIENT_URL, credentials: true }));
 app.use(cookieParser());
 app.use(express.static("public"));
-app.use(express.json({ limit: "16kb" }));
+app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: "16kb" }));
-if (process.env.NODE_ENV === "development") {
-    app.use(logger("dev"));
-}
+if (NODE_ENV === "development") app.use(logger("dev"));
+app.use("/api", routes);
 app.use(errorHandler);
+
+app.get(
+    "/",
+    asyncHandler((req, res) => {
+        res.status(200).send(`🚀  Express server is running at port ${PORT}`);
+    })
+);
 
 export default app;

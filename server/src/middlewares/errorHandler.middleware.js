@@ -1,6 +1,15 @@
+import { NODE_ENV } from "../configs/config.js";
+
 export const errorHandler = (err, req, res, next) => {
-    res.status(err.code || 500).json({
+    const statusCode = err.statusCode || 500;
+    const message = err.message || "Something went wrong";
+    const errors = err.errors || [];
+
+    res.status(statusCode).json({
         success: false,
-        message: err.message || "Something went wrong",
+        statusCode,
+        message,
+        errors,
+        stack: NODE_ENV === "production" ? undefined : err.stack,
     });
 };

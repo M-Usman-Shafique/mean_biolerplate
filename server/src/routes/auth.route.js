@@ -1,13 +1,19 @@
 import { Router } from "express";
+import asyncHandler from "express-async-handler";
 import { upload } from "../middlewares/multer.middleware.js";
-import { loginController } from "../controllers/auth/login.controller.js";
-import { registerController } from "../controllers/auth/register.controller.js";
-import { uploadFileController } from "../controllers/uploadFile.controller.js";
+import { verifyAuth } from "../middlewares/verifyAuth.middleware.js";
+import {
+    registerUser,
+    loginUser,
+    logoutUser,
+    refreshAccessToken,
+} from "../controllers/auth.controller.js";
 
 const router = Router();
 
-router.post("/register", upload.single("file"), registerController);
-router.post("/login", loginController);
-router.post("/upload", upload.array("files"), uploadFileController);
+router.post("/register", upload.single("file"), registerUser);
+router.post("/login", asyncHandler(loginUser));
+router.post("/logout", verifyAuth, asyncHandler(logoutUser));
+router.post("/refresh-token", asyncHandler(refreshAccessToken));
 
 export default router;

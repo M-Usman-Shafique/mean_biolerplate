@@ -1,15 +1,9 @@
-import connectDB from "./configs/mongodb.js";
+import { API_URL, PORT } from "./configs/config.js";
 import app from "./configs/express.js";
-import routes from "./routes/router.js";
+import connectDB from "./configs/mongodb.js";
 
-const port = process.env.PORT || 3000;
-const URL = process.env.API_URL;
-
-app.get("/", (req, res) => {
-    res.status(200).send(`🚀  Express server is running at port ${port}`);
-});
-
-app.use("/api", routes);
+const port = PORT;
+const URL = API_URL;
 
 connectDB()
     .then(async () => {
