@@ -1,4 +1,141 @@
-<div class="flex flex-col items-center justify-center gap-5 h-screen">
-    <h1 class="text-4xl font-bold">Sign up</h1>
-    <button matButton="outlined" routerLink="/login">Login</button>
+<div class="form-container">
+    <form [formGroup]="signupForm" (ngSubmit)="handleSubmit()" class="signup-form">
+        <h2 style="text-align: center">Create new account</h2>
+
+        <!-- Username -->
+        <mat-form-field appearance="outline" [hideRequiredMarker]="true" class="form-field">
+            <mat-label>Username</mat-label>
+            <input type="text" matInput formControlName="username" />
+            @if (
+                signupForm.get("username")?.touched &&
+                signupForm.get("username")?.hasError("required")
+            ) {
+                <mat-error class="field-error">
+                    <mat-icon
+                        aria-hidden="false"
+                        aria-label="error icon"
+                        fontIcon="error_outline"
+                        style="font-size: 0.875rem"
+                    ></mat-icon>
+                    Username is required
+                </mat-error>
+            } @else if (
+                signupForm.get("username")?.touched &&
+                signupForm.get("username")?.hasError("minlength")
+            ) {
+                <mat-error class="field-error">
+                    <mat-icon
+                        aria-hidden="false"
+                        aria-label="error icon"
+                        fontIcon="error_outline"
+                        style="font-size: 0.875rem"
+                    ></mat-icon>
+                    Username must be at least 3 characters
+                </mat-error>
+            }
+        </mat-form-field>
+
+        <!-- Email -->
+        <mat-form-field appearance="outline" [hideRequiredMarker]="true" class="form-field">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="email" />
+            @if (
+                signupForm.get("email")?.touched && signupForm.get("email")?.hasError("required")
+            ) {
+                <mat-error class="field-error">
+                    <mat-icon
+                        aria-hidden="false"
+                        aria-label="error icon"
+                        fontIcon="error_outline"
+                        style="font-size: 0.875rem"
+                    ></mat-icon>
+                    Email is required
+                </mat-error>
+            } @else if (
+                signupForm.get("email")?.touched && signupForm.get("email")?.hasError("email")
+            ) {
+                <mat-error class="field-error">
+                    <mat-icon
+                        aria-hidden="false"
+                        aria-label="error icon"
+                        fontIcon="error_outline"
+                        style="font-size: 0.875rem"
+                    ></mat-icon>
+                    Please enter a valid email address
+                </mat-error>
+            }
+        </mat-form-field>
+
+        <!-- Password -->
+        <mat-form-field appearance="outline" [hideRequiredMarker]="true" class="form-field">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" formControlName="password" />
+            @if (
+                signupForm.get("password")?.touched &&
+                signupForm.get("password")?.hasError("required")
+            ) {
+                <mat-error class="field-error">
+                    <mat-icon
+                        aria-hidden="false"
+                        aria-label="error icon"
+                        fontIcon="error_outline"
+                        style="font-size: 0.875rem"
+                    ></mat-icon>
+                    Password is required
+                </mat-error>
+            } @else if (
+                signupForm.get("password")?.touched &&
+                signupForm.get("password")?.hasError("minlength")
+            ) {
+                <mat-error class="field-error">
+                    <mat-icon
+                        aria-hidden="false"
+                        aria-label="error icon"
+                        fontIcon="error_outline"
+                        style="font-size: 0.875rem"
+                    ></mat-icon>
+                    Password must be at least 6 characters
+                </mat-error>
+            }
+        </mat-form-field>
+
+        <!-- Confirm Password -->
+        <mat-form-field appearance="outline" [hideRequiredMarker]="true" class="form-field">
+            <mat-label>Confirm Password</mat-label>
+            <input matInput type="password" formControlName="confirmPassword" />
+            @if (
+                signupForm.get("confirmPassword")?.touched &&
+                signupForm.get("confirmPassword")?.hasError("required")
+            ) {
+                <mat-error class="field-error">
+                    <mat-icon
+                        aria-hidden="false"
+                        aria-label="error icon"
+                        fontIcon="error_outline"
+                        style="font-size: 0.875rem"
+                    ></mat-icon>
+                    Confirm password is required
+                </mat-error>
+            } @else if (
+                signupForm.get("confirmPassword")?.touched &&
+                signupForm.get("confirmPassword")?.hasError("mismatch")
+            ) {
+                <mat-error class="field-error">
+                    <mat-icon
+                        aria-hidden="false"
+                        aria-label="error icon"
+                        fontIcon="error_outline"
+                        style="font-size: 0.875rem"
+                    ></mat-icon>
+                    Passwords do not match
+                </mat-error>
+            }
+        </mat-form-field>
+
+        <!-- Action section -->
+        <button mat-flat-button type="submit" [disabled]="isSubmitting">Sign up</button>
+        <p class="login-link" style="text-align: center">
+            Already have an account? <a routerLink="/login">Login</a>
+        </p>
+    </form>
 </div>
