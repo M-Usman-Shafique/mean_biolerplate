@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, signal } from "@angular/core";
 import {
     AbstractControl,
     FormControl,
@@ -10,8 +10,14 @@ import {
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { MatIconModule } from "@angular/material/icon";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatSelectModule } from "@angular/material/select";
+import { AuthService } from "../../core/services/auth.service";
+import { setData } from "../../core/utils/localstorage";
+import { finalize } from "rxjs";
+import { AuthResponse } from "../../core/constants/types";
 
 @Component({
     selector: "app-signup",
@@ -22,13 +28,20 @@ import { MatIconModule } from "@angular/material/icon";
         ReactiveFormsModule,
         MatFormFieldModule,
         MatInputModule,
+        MatSelectModule,
     ],
     templateUrl: "./signup.component.html",
     styleUrl: "./signup.component.scss",
 })
 export class SignupComponent {
-    isSubmitting = false;
-    formData: any;
+    constructor(
+        private snackBar: MatSnackBar,
+        private authService: AuthService,
+        private router: Router
+    ) {}
+
+    isSubmitting = signal(false);
+    userData: any;
 
     signupForm: FormGroup = new FormGroup(
         {
@@ -36,6 +49,7 @@ export class SignupComponent {
             email: new FormControl("", [Validators.required, this.strictEmailValidator]),
             password: new FormControl("", [Validators.required, Validators.minLength(6)]),
             confirmPassword: new FormControl("", [Validators.required]),
+            role: new FormControl(""),
         },
         { validators: this.passwordMatchValidator }
     );
@@ -63,14 +77,40 @@ export class SignupComponent {
         return null;
     }
 
-    handleSubmit(): void {
+    async handleSignup(): Promise<void> {
+        if (this.isSubmitting()) return;
+
         this.signupForm.markAllAsTouched();
-        if (!this.signupForm.valid) return;
+        if (this.signupForm.invalid) return;
 
-        this.isSubmitting = true;
+        this.userData = this.signupForm.value;
+        this.userData.role = this.userData.role || "User";
+        this.isSubmitting.set(true);
 
-        this.formData = this.signupForm.value;
-        console.log("Form submitted:", this.signupForm.value);
-        this.isSubmitting = false;
+        this.authService
+            .signup(this.userData)
+            .pipe(finalize(() => this.isSubmitting.set(false)))
+            .subscribe({
+                next: ({ user, message }: AuthResponse) => {
+                    this.snackBar.open(message, "Close", { duration: 3000 });
+                    setData("userInfo", user);
+                    this.userData = null;
+                    this.signupForm.reset();
+                    Object.keys(this.signupForm.controls).forEach((key) =>
+                        this.signupForm.get(key)?.setErrors(null)
+                    );
+                    this.authService.setAuthState(true);
+                    this.router.navigate(["/"]);
+                },
+                error: (error) => {
+                    this.snackBar.open(error?.error?.message || "Signup failed.", "Close", {
+                        duration: 3000,
+                    });
+                    console.error(error);
+                },
+                complete: () => {
+                    console.log("Signup successful...");
+                },
+            });
     }
 }

@@ -1,25 +1,32 @@
-// src/app/core/services/auth.service.ts
-import { Injectable } from "@angular/core";
+import { inject, Injectable, signal } from "@angular/core";
+import { Observable } from "rxjs";
+import { ApiService } from "./api.service";
+import { apiRoutes } from "../../config/routes.config";
+import { AuthResponse } from "../constants/types";
 
-@Injectable({
-    providedIn: "root",
-})
+@Injectable({ providedIn: "root" })
 export class AuthService {
-    private tokenKey = "access_token";
+    private api = inject(ApiService);
+    isLoggedIn = signal(false);
 
-    isAuthenticated(): boolean {
-        return !!localStorage.getItem(this.tokenKey);
+    setAuthState(value: boolean): void {
+        this.isLoggedIn.set(value);
     }
 
-    login(token: string): void {
-        localStorage.setItem(this.tokenKey, token);
+
+    signup(payload: any): Observable<AuthResponse> {
+        return this.api.post<AuthResponse>(apiRoutes.signup, payload);
     }
 
-    logout(): void {
-        localStorage.removeItem(this.tokenKey);
+    login(payload: any): Observable<AuthResponse> {
+        return this.api.post<AuthResponse>(apiRoutes.login, payload);
     }
 
-    getToken(): string | null {
-        return localStorage.getItem(this.tokenKey);
+    logout(): Observable<{ message: string }> {
+        return this.api.post<{ message: string }>(apiRoutes.logout, {});
+    }
+
+    refreshToken(): Observable<{ accessToken: string }> {
+        return this.api.post<{ accessToken: string }>(apiRoutes.refreshToken, {});
     }
 }

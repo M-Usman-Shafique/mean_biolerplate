@@ -22,17 +22,17 @@ export const updateAvatar = async (req, res) => {
         throw new ApiError(500, "Failed to upload image");
     }
 
-    const updatedUser = await User.findByIdAndUpdate(
+    const updatedAvatar = await User.findByIdAndUpdate(
         userId,
         { avatar: imageUrl },
         { new: true }
-    ).select("-password -refreshToken");
+    ).select("avatar");
 
-    if (!updatedUser) {
+    if (!updatedAvatar) {
         throw new ApiError(500, "Failed to update user avatar");
     }
 
     return res
         .status(200)
-        .json(new ApiResponse(200, { user: updatedUser }, "Avatar uploaded successfully"));
+        .json(new ApiResponse(200, { avatar: updatedAvatar }, "Avatar updated successfully"));
 };

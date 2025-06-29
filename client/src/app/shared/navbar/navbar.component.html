@@ -1,5 +1,11 @@
-<!-- src/app/components/navbar.component.html -->
-<nav class="flex items-center justify-between px-5 py-4 bg-white/5 border-b border-black/5">
-    <img src="assets/logo.svg" alt="Logo" class="max-w-[9rem] cursor-pointer" routerLink="/" />
-    <app-toggle-theme />
+<nav class="nav-container" style="display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; background-color: rgba(255, 255, 255, 0.05); border-bottom: 1px solid rgba(0, 0, 0, 0.05);">
+    <img src="assets/logo.svg" alt="Logo" style="max-width: 9rem; cursor: pointer;" routerLink="/" />
+    <div class="right-side" style="display: flex; align-items: center; gap: 1rem;">
+        @if (isLoggedIn) {
+            <button mat-stroked-button (click)="handleLogout()" [disabled]="isSubmitting()">Logout</button>
+        } @else {
+            <button mat-stroked-button routerLink="/login">Login</button>
+        }
+        <app-toggle-theme />
+    </div>
 </nav>

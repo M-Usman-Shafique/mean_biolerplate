@@ -1,5 +1,5 @@
 <div class="form-container">
-    <form [formGroup]="signupForm" (ngSubmit)="handleSubmit()" class="signup-form">
+    <form [formGroup]="signupForm" (submit)="handleSignup()" class="signup-form">
         <h2 style="text-align: center">Create new account</h2>
 
         <!-- Username -->
@@ -132,10 +132,21 @@
             }
         </mat-form-field>
 
+        <!-- Role -->
+        <mat-form-field appearance="outline" [hideRequiredMarker]="true" class="form-field">
+            <mat-label>Choose a role</mat-label>
+            <mat-select formControlName="role">
+                <mat-option value="User">User</mat-option>
+                <mat-option value="Admin">Admin</mat-option>
+            </mat-select>
+        </mat-form-field>
+
         <!-- Action section -->
-        <button mat-flat-button type="submit" [disabled]="isSubmitting">Sign up</button>
+        <button mat-flat-button type="submit" [disabled]="isSubmitting()">
+            {{ isSubmitting() ? "Creating account..." : "Sign Up" }}
+        </button>
         <p class="login-link" style="text-align: center">
-            Already have an account? <a routerLink="/login">Login</a>
+            Already have an account? <a routerLink="/login" style="color: var(--primary);">Login</a>
         </p>
     </form>
 </div>

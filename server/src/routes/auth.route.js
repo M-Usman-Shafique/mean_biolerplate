@@ -3,7 +3,7 @@ import asyncHandler from "express-async-handler";
 import { upload } from "../middlewares/multer.middleware.js";
 import { verifyAuth } from "../middlewares/verifyAuth.middleware.js";
 import {
-    registerUser,
+    signupUser,
     loginUser,
     logoutUser,
     refreshAccessToken,
@@ -11,7 +11,7 @@ import {
 
 const router = Router();
 
-router.post("/register", upload.single("file"), registerUser);
+router.post("/signup", upload.single("file"), signupUser);
 router.post("/login", asyncHandler(loginUser));
 router.post("/logout", verifyAuth, asyncHandler(logoutUser));
 router.post("/refresh-token", asyncHandler(refreshAccessToken));

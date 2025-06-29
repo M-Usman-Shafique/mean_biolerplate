@@ -9,7 +9,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";
 import { respondWithAuth } from "../utils/respondWithAuth.js";
 
-export const registerUser = async (req, res, next) => {
+export const signupUser = async (req, res, next) => {
     const filePath = req.file?.path;
     try {
         const { username, email, password, role } = req.body;
@@ -18,7 +18,7 @@ export const registerUser = async (req, res, next) => {
             throw new ApiError(400, "Username, email, and password are required.");
         }
 
-        if (role && !ROLES.includes(role)) {
+        if (role && !ROLES.includes(role?.trim())) {
             throw new ApiError(400, "Invalid role assignment.");
         }
 

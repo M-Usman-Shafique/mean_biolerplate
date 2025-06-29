@@ -10,14 +10,16 @@ export const routes: Routes = [
     {
         path: "",
         component: MainLayoutComponent,
-        canActivate: [authGuard],
         children: [
             {
                 path: "",
+                title: "Home",
                 component: HomeComponent,
             },
             {
                 path: "dashboard",
+                title: "Dashboard",
+                canActivate: [authGuard],
                 loadComponent: () =>
                     import("./features/dashboard/dashboard.component").then(
                         (m) => m.DashboardComponent
@@ -26,24 +28,19 @@ export const routes: Routes = [
         ],
     },
     {
-        path: "login",
+        path: "",
         component: AuthLayoutComponent,
-        canMatch: [guestGuard],
+        canActivate: [guestGuard],
         children: [
             {
-                path: "",
+                path: "login",
+                title: "Login",
                 loadComponent: () =>
                     import("./auth/login/login.component").then((m) => m.LoginComponent),
             },
-        ],
-    },
-    {
-        path: "signup",
-        component: AuthLayoutComponent,
-        canMatch: [guestGuard],
-        children: [
             {
-                path: "",
+                path: "signup",
+                title: "Signup",
                 loadComponent: () =>
                     import("./auth/signup/signup.component").then((m) => m.SignupComponent),
             },
@@ -52,6 +49,7 @@ export const routes: Routes = [
 
     {
         path: "**",
+        title: "Not Found",
         loadComponent: () =>
             import("./features/not-found/not-found.component").then((m) => m.NotFoundComponent),
     },

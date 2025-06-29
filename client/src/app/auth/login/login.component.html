@@ -1,4 +1,83 @@
-<div class="flex flex-col items-center justify-center gap-5 h-screen">
+<!-- <div class="flex flex-col items-center justify-center gap-5 h-screen">
     <h1 class="text-4xl font-bold">Login</h1>
     <button matButton="outlined" routerLink="/signup">Sign up</button>
+</div> -->
+
+
+<div class="form-container">
+    <form [formGroup]="loginForm" (submit)="handleLogin()" class="login-form">
+        <h2 style="text-align: center">Login</h2>
+
+        <!-- Email -->
+        <mat-form-field appearance="outline" [hideRequiredMarker]="true" class="form-field">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="email" />
+            @if (
+                loginForm.get("email")?.touched && loginForm.get("email")?.hasError("required")
+            ) {
+                <mat-error class="field-error">
+                    <mat-icon
+                        aria-hidden="false"
+                        aria-label="error icon"
+                        fontIcon="error_outline"
+                        style="font-size: 0.875rem"
+                    ></mat-icon>
+                    Email is required
+                </mat-error>
+            } @else if (
+                loginForm.get("email")?.touched && loginForm.get("email")?.hasError("email")
+            ) {
+                <mat-error class="field-error">
+                    <mat-icon
+                        aria-hidden="false"
+                        aria-label="error icon"
+                        fontIcon="error_outline"
+                        style="font-size: 0.875rem"
+                    ></mat-icon>
+                    Please enter a valid email address
+                </mat-error>
+            }
+        </mat-form-field>
+
+        <!-- Password -->
+        <mat-form-field appearance="outline" [hideRequiredMarker]="true" class="form-field">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" formControlName="password" />
+            @if (
+                loginForm.get("password")?.touched &&
+                loginForm.get("password")?.hasError("required")
+            ) {
+                <mat-error class="field-error">
+                    <mat-icon
+                        aria-hidden="false"
+                        aria-label="error icon"
+                        fontIcon="error_outline"
+                        style="font-size: 0.875rem"
+                    ></mat-icon>
+                    Password is required
+                </mat-error>
+            } @else if (
+                loginForm.get("password")?.touched &&
+                loginForm.get("password")?.hasError("minlength")
+            ) {
+                <mat-error class="field-error">
+                    <mat-icon
+                        aria-hidden="false"
+                        aria-label="error icon"
+                        fontIcon="error_outline"
+                        style="font-size: 0.875rem"
+                    ></mat-icon>
+                    Password must be at least 6 characters
+                </mat-error>
+            }
+        </mat-form-field>
+
+        <!-- Action section -->
+        <button mat-flat-button type="submit" [disabled]="isSubmitting()">
+            {{ isSubmitting() ? "Logging in..." : "Login" }}
+        </button>
+        <p class="login-link" style="text-align: center">
+            Don't have an account? <a routerLink="/signup" style="color: var(--primary);">Sign Up</a>
+        </p>
+    </form>
 </div>
