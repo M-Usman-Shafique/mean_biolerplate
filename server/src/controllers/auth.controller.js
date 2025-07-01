@@ -91,7 +91,7 @@ export const logoutUser = async (req, res) => {
         .json(new ApiResponse(200, {}, "User logged out"));
 };
 
-export const validateSession = (req, res) => {
+export const validateAuth = (req, res) => {
     const accessToken = req.cookies?.accessToken || req.body?.accessToken;
 
     if (!accessToken) {
@@ -106,7 +106,7 @@ export const validateSession = (req, res) => {
     }
 };
 
-export const refreshSession = async (req, res) => {
+export const refreshAuth = async (req, res) => {
     const incomingRefreshToken = req.cookies?.refreshToken || req.body?.refreshToken;
 
     if (!incomingRefreshToken) {

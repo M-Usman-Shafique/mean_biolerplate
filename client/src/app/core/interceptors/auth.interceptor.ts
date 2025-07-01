@@ -2,7 +2,7 @@ import { HttpEvent, HttpHandlerFn, HttpInterceptorFn, HttpRequest } from "@angul
 import { catchError, Observable, switchMap, throwError } from "rxjs";
 import { AuthService } from "../services/auth.service";
 import { inject, signal } from "@angular/core";
-import { clearStorage } from "../utils/localstorage";
+import { clearStorage } from "../utils/localstorage.util";
 import { NotificationService } from "../services/notification.service";
 
 let refreshInProgress = signal(false);
@@ -36,7 +36,7 @@ const handleUnauthorizedError = (
     if (!refreshInProgress()) {
         refreshInProgress.set(true);
 
-        return authService.refreshSession().pipe(
+        return authService.refreshAuth().pipe(
             switchMap(() => {
                 console.log("Session refreshed via Interceptor. Try again...");
                 refreshInProgress.set(false);

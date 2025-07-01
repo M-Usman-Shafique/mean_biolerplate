@@ -1,18 +1,19 @@
 import { inject, Injectable, signal } from "@angular/core";
-import { Observable, Subject } from "rxjs";
+import { Observable, of } from "rxjs";
 import { ApiService } from "./api.service";
 import { apiRoutes } from "../../config/routes.config";
 import { AuthResponse } from "../constants/types";
-import { clearStorage } from "../utils/localstorage";
-import { map, take } from "rxjs/operators";
+import { clearStorage } from "../utils/localstorage.util";
+import { filter, map, take } from "rxjs/operators";
+import { toObservable } from "@angular/core/rxjs-interop";
 
 @Injectable({ providedIn: "root" })
 export class AuthService {
     private api = inject(ApiService);
+
     isAuthenticated = signal(false);
-    private hasValidated = false;
-    private sessionValidated = signal(false);
-    private sessionValidatedSubject = new Subject<boolean>();
+    private isValidating = false;
+    private hasValidated = signal(false);
 
     setAuthState(value: boolean): void {
         this.isAuthenticated.set(value);
@@ -34,52 +35,45 @@ export class AuthService {
         return this.api.post<{ message: string }>(apiRoutes.logout, {});
     }
 
-    validateSession(): void {
-        if (this.hasValidated) return;
-        this.hasValidated = true;
+    private completeValidation(authenticated: boolean): void {
+        this.setAuthState(authenticated);
+        this.hasValidated.set(true);
+    }
 
-        this.api.get(apiRoutes.validateSession).subscribe({
-            next: () => {
-                this.setAuthState(true);
-                this.sessionValidated.set(true);
-                this.sessionValidatedSubject.next(true);
-            },
+    validateAuth(): void {
+        if (this.isValidating) return;
+        this.isValidating = true;
+
+        this.api.get(apiRoutes.validateAuth).subscribe({
+            next: () => this.completeValidation(true),
             error: () => {
                 console.warn("Session expired, trying refresh...");
-                this.refreshSession().subscribe({
+                this.refreshAuth().subscribe({
                     next: () => {
                         console.log("Session refreshed successfully.");
-                        this.setAuthState(true);
-                        this.sessionValidated.set(true);
-                        this.sessionValidatedSubject.next(true);
+                        this.completeValidation(true);
                     },
                     error: () => {
                         console.error("Session could not be refreshed. Please log in again.");
                         clearStorage("userInfo");
-                        this.setAuthState(false);
-                        this.sessionValidated.set(true);
-                        this.sessionValidatedSubject.next(true);
+                        this.completeValidation(false);
                     },
                 });
             },
         });
     }
 
-    refreshSession(): Observable<{ accessToken: string }> {
-        return this.api.post<{ accessToken: string }>(apiRoutes.refreshSession, {});
+    refreshAuth(): Observable<{ accessToken: string }> {
+        return this.api.post<{ accessToken: string }>(apiRoutes.refreshAuth, {});
     }
 
-    waitForSessionValidation(): Observable<boolean> {
-        if (this.sessionValidated()) {
-            return new Observable<boolean>((observer) => {
-                observer.next(this.isAuthenticated());
-                observer.complete();
-            });
-        } else {
-            return this.sessionValidatedSubject.asObservable().pipe(
-                map(() => this.isAuthenticated()),
-                take(1)
-            );
-        }
+    authReady(): Observable<boolean> {
+        return this.hasValidated()
+            ? of(this.isAuthenticated())
+            : toObservable(this.hasValidated).pipe(
+                  filter(Boolean),
+                  map(() => this.isAuthenticated()),
+                  take(1)
+              );
     }
 }

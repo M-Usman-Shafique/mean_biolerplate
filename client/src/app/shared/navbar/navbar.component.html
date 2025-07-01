@@ -18,7 +18,7 @@
         <mat-menu #menu="matMenu">
             <button mat-menu-item disabled>
                 <mat-icon>account_circle</mat-icon>
-                <span>ali&#64;test.com</span>
+                <span>{{ userInfo?.email}}</span>
             </button>
             <button mat-menu-item (click)="handleLogout()" [disabled]="isSubmitting()">
                 <mat-icon>logout</mat-icon>

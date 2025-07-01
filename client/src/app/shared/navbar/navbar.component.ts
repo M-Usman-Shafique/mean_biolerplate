@@ -6,8 +6,9 @@ import { MatMenuModule } from "@angular/material/menu";
 import { MatIconModule } from "@angular/material/icon";
 import { AuthService } from "../../core/services/auth.service";
 import { finalize } from "rxjs";
-import { clearStorage } from "../../core/utils/localstorage";
+import { clearStorage, getFromStorage } from "../../core/utils/localstorage.util";
 import { NotificationService } from "../../core/services/notification.service";
+import { User } from "../../core/constants/types";
 
 @Component({
     selector: "app-navbar",
@@ -25,9 +26,11 @@ export class NavbarComponent implements OnInit {
     protected brandName = "Softaims";
     protected isSubmitting = signal(false);
     protected isLoggedIn!: Signal<boolean>;
+    protected userInfo!: User | null;
 
     ngOnInit(): void {
         this.isLoggedIn = this.authService.isAuthenticated;
+        this.userInfo = getFromStorage("userInfo");
     }
 
     async handleLogout(): Promise<void> {

@@ -5,6 +5,6 @@ export const apiRoutes = {
     login: "auth/login",
     signup: "auth/signup",
     logout: "auth/logout",
-    validateSession: "auth/validate",
-    refreshSession: "auth/refresh",
+    validateAuth: "auth/validate",
+    refreshAuth: "auth/refresh",
 };

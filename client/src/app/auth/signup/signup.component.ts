@@ -10,14 +10,15 @@ import {
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
-import { Router, RouterLink } from "@angular/router";
+import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { MatIconModule } from "@angular/material/icon";
 import { MatSelectModule } from "@angular/material/select";
 import { AuthService } from "../../core/services/auth.service";
-import { setToStorage } from "../../core/utils/localstorage";
+import { setToStorage } from "../../core/utils/localstorage.util";
 import { finalize } from "rxjs";
 import { AuthResponse } from "../../core/constants/types";
 import { NotificationService } from "../../core/services/notification.service";
+import { redirectToReturnUrl } from "../../core/utils/redirect.util";
 
 @Component({
     selector: "app-signup",
@@ -37,7 +38,8 @@ export class SignupComponent {
     constructor(
         private notification: NotificationService,
         private authService: AuthService,
-        private router: Router
+        private router: Router,
+        private route: ActivatedRoute
     ) {}
 
     isSubmitting = signal(false);
@@ -100,7 +102,7 @@ export class SignupComponent {
                         this.signupForm.get(key)?.setErrors(null)
                     );
                     this.authService.setAuthState(true);
-                    this.router.navigate(["/"]);
+                    redirectToReturnUrl(this.route, this.router);
                 },
                 error: (error) => {
                     this.notification.error(error?.message || "Signup failed.");
