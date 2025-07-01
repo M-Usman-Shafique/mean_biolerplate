@@ -12,12 +12,12 @@ import { MatInputModule } from "@angular/material/input";
 import { MatButtonModule } from "@angular/material/button";
 import { Router, RouterLink } from "@angular/router";
 import { MatIconModule } from "@angular/material/icon";
-import { MatSnackBar } from "@angular/material/snack-bar";
 import { MatSelectModule } from "@angular/material/select";
 import { AuthService } from "../../core/services/auth.service";
-import { setData } from "../../core/utils/localstorage";
+import { setToStorage } from "../../core/utils/localstorage";
 import { finalize } from "rxjs";
 import { AuthResponse } from "../../core/constants/types";
+import { NotificationService } from "../../core/services/notification.service";
 
 @Component({
     selector: "app-signup",
@@ -35,7 +35,7 @@ import { AuthResponse } from "../../core/constants/types";
 })
 export class SignupComponent {
     constructor(
-        private snackBar: MatSnackBar,
+        private notification: NotificationService,
         private authService: AuthService,
         private router: Router
     ) {}
@@ -92,8 +92,8 @@ export class SignupComponent {
             .pipe(finalize(() => this.isSubmitting.set(false)))
             .subscribe({
                 next: ({ user, message }: AuthResponse) => {
-                    this.snackBar.open(message, "Close", { duration: 3000 });
-                    setData("userInfo", user);
+                    this.notification.success(message);
+                    setToStorage("userInfo", user);
                     this.userData = null;
                     this.signupForm.reset();
                     Object.keys(this.signupForm.controls).forEach((key) =>
@@ -103,9 +103,7 @@ export class SignupComponent {
                     this.router.navigate(["/"]);
                 },
                 error: (error) => {
-                    this.snackBar.open(error?.error?.message || "Signup failed.", "Close", {
-                        duration: 3000,
-                    });
+                    this.notification.error(error?.message || "Signup failed.");
                     console.error(error);
                 },
                 complete: () => {

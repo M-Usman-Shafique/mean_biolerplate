@@ -6,7 +6,8 @@ import {
     signupUser,
     loginUser,
     logoutUser,
-    refreshAccessToken,
+    validateSession,
+    refreshSession,
 } from "../controllers/auth.controller.js";
 
 const router = Router();
@@ -14,6 +15,7 @@ const router = Router();
 router.post("/signup", upload.single("file"), signupUser);
 router.post("/login", asyncHandler(loginUser));
 router.post("/logout", verifyAuth, asyncHandler(logoutUser));
-router.post("/refresh-token", asyncHandler(refreshAccessToken));
+router.get("/validate", asyncHandler(validateSession));
+router.post("/refresh", asyncHandler(refreshSession));
 
 export default router;

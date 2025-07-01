@@ -14,10 +14,10 @@ import { MatInputModule } from "@angular/material/input";
 import { MatSelectModule } from "@angular/material/select";
 import { Router, RouterLink } from "@angular/router";
 import { AuthService } from "../../core/services/auth.service";
-import { MatSnackBar } from "@angular/material/snack-bar";
 import { finalize } from "rxjs";
-import { setData } from "../../core/utils/localstorage";
+import { setToStorage } from "../../core/utils/localstorage";
 import { AuthResponse } from "../../core/constants/types";
+import { NotificationService } from "../../core/services/notification.service";
 
 @Component({
     selector: "app-login",
@@ -35,7 +35,7 @@ import { AuthResponse } from "../../core/constants/types";
 })
 export class LoginComponent {
     constructor(
-        private snackBar: MatSnackBar,
+        private notification: NotificationService,
         private authService: AuthService,
         private router: Router
     ) {}
@@ -68,8 +68,8 @@ export class LoginComponent {
             .pipe(finalize(() => this.isSubmitting.set(false)))
             .subscribe({
                 next: ({ user, message }: AuthResponse) => {
-                    this.snackBar.open(message, "Close", { duration: 3000 });
-                    setData("userInfo", user);
+                    this.notification.success(message);
+                    setToStorage("userInfo", user);
                     this.loginForm.reset();
                     this.userData = null;
                     Object.keys(this.loginForm.controls).forEach((key) =>
@@ -79,9 +79,7 @@ export class LoginComponent {
                     this.router.navigate(["/"]);
                 },
                 error: (error) => {
-                    this.snackBar.open(error?.error?.message || "Login failed.", "Close", {
-                        duration: 3000,
-                    });
+                    this.notification.error(error?.message || "Login failed.");
                     console.error(error);
                 },
                 complete: () => {

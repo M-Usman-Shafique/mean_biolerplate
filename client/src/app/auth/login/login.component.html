@@ -1,20 +1,12 @@
-<!-- <div class="flex flex-col items-center justify-center gap-5 h-screen">
-    <h1 class="text-4xl font-bold">Login</h1>
-    <button matButton="outlined" routerLink="/signup">Sign up</button>
-</div> -->
-
-
 <div class="form-container">
-    <form [formGroup]="loginForm" (submit)="handleLogin()" class="login-form">
-        <h2 style="text-align: center">Login</h2>
+    <form [formGroup]="loginForm" (ngSubmit)="handleLogin()" class="login-form">
+        <h2 class="gradient-text" style="text-align: center; font-size: 1.75rem">Login</h2>
 
         <!-- Email -->
         <mat-form-field appearance="outline" [hideRequiredMarker]="true" class="form-field">
             <mat-label>Email</mat-label>
             <input matInput type="email" formControlName="email" />
-            @if (
-                loginForm.get("email")?.touched && loginForm.get("email")?.hasError("required")
-            ) {
+            @if (loginForm.get("email")?.touched && loginForm.get("email")?.hasError("required")) {
                 <mat-error class="field-error">
                     <mat-icon
                         aria-hidden="false"
@@ -73,11 +65,28 @@
         </mat-form-field>
 
         <!-- Action section -->
-        <button mat-flat-button type="submit" [disabled]="isSubmitting()">
-            {{ isSubmitting() ? "Logging in..." : "Login" }}
-        </button>
-        <p class="login-link" style="text-align: center">
-            Don't have an account? <a routerLink="/signup" style="color: var(--primary);">Sign Up</a>
+        <div
+            style="
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 1.25rem;
+            "
+        >
+            <button type="button" matButton="outlined" routerLink="/" style="flex: 1; padding-block: 1.375rem">
+                Go Back
+            </button>
+            <button
+                mat-flat-button
+                type="submit"
+                [disabled]="isSubmitting()"
+                style="flex: 1; padding-block: 1.375rem"
+            >
+                {{ isSubmitting() ? "Logging in..." : "Login" }}
+            </button>
+        </div>
+        <p style="text-align: center">
+            Don't have an account? <a routerLink="/signup" class="auth-link" style="color: var(--primary)">Sign Up</a>
         </p>
     </form>
 </div>

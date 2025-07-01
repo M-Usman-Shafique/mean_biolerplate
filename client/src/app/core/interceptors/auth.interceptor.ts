@@ -2,22 +2,23 @@ import { HttpEvent, HttpHandlerFn, HttpInterceptorFn, HttpRequest } from "@angul
 import { catchError, Observable, switchMap, throwError } from "rxjs";
 import { AuthService } from "../services/auth.service";
 import { inject, signal } from "@angular/core";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { clearData } from "../utils/localstorage";
+import { clearStorage } from "../utils/localstorage";
+import { NotificationService } from "../services/notification.service";
 
-let isRefreshingToken = signal(false);
+let refreshInProgress = signal(false);
 
 export const authInterceptor: HttpInterceptorFn = (
     req: HttpRequest<any>,
     next: HttpHandlerFn
 ): Observable<HttpEvent<any>> => {
     const authService = inject(AuthService);
-    const _snackBar = inject(MatSnackBar);
+    const notification = inject(NotificationService);
 
     return next(req).pipe(
         catchError((error) => {
-            if (error.status === 401) {
-                return handleUnauthorizedError(req, next, error, authService, _snackBar);
+            if (error.status === 401 && authService.isLoggedIn()) {
+                console.warn("Session expired, trying refresh via interceptor...");
+                return handleUnauthorizedError(req, next, error, authService, notification);
             } else {
                 return throwError(() => error);
             }
@@ -30,24 +31,24 @@ const handleUnauthorizedError = (
     next: HttpHandlerFn,
     originalError: any,
     authService: AuthService,
-    _snackBar: MatSnackBar
+    notification: NotificationService
 ) => {
-    if (!isRefreshingToken()) {
-        isRefreshingToken.set(true);
+    if (!refreshInProgress()) {
+        refreshInProgress.set(true);
 
-        return authService.refreshToken().pipe(
+        return authService.refreshSession().pipe(
             switchMap(() => {
-                _snackBar.open("Tokens refreshed. Try again...");
-                isRefreshingToken.set(false);
+                console.log("Session refreshed via Interceptor. Try again...");
+                refreshInProgress.set(false);
 
                 return next(req);
             }),
             catchError((error) => {
-                isRefreshingToken.set(false);
-                _snackBar.open("Session expired. Logging you out...");
-                clearData("userInfo");
+                refreshInProgress.set(false);
+                notification.error("Session expired. Logging you out...");
+                clearStorage("userInfo");
                 authService.setAuthState(false);
-                console.error("Error during token refresh:", error);
+                console.error("Error during session refresh via Interceptor:", error);
                 return throwError(() => originalError);
             })
         );

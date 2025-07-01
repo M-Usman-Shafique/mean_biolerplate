@@ -1,6 +1,8 @@
 <div class="form-container">
-    <form [formGroup]="signupForm" (submit)="handleSignup()" class="signup-form">
-        <h2 style="text-align: center">Create new account</h2>
+    <form [formGroup]="signupForm" (ngSubmit)="handleSignup()" class="signup-form">
+        <h2 class="gradient-text" style="text-align: center; font-size: 1.75rem"
+            >Create new account</h2
+        >
 
         <!-- Username -->
         <mat-form-field appearance="outline" [hideRequiredMarker]="true" class="form-field">
@@ -142,11 +144,28 @@
         </mat-form-field>
 
         <!-- Action section -->
-        <button mat-flat-button type="submit" [disabled]="isSubmitting()">
-            {{ isSubmitting() ? "Creating account..." : "Sign Up" }}
-        </button>
-        <p class="login-link" style="text-align: center">
-            Already have an account? <a routerLink="/login" style="color: var(--primary);">Login</a>
+        <div
+            style="display: flex; align-items: center; justify-content: space-between; gap: 1.25rem"
+        >
+            <button
+                type="button"
+                matButton="outlined"
+                routerLink="/"
+                style="flex: 1; padding-block: 1.375rem"
+                >Go Back</button
+            >
+            <button
+                mat-flat-button
+                type="submit"
+                [disabled]="isSubmitting()"
+                style="flex: 1; padding-block: 1.375rem"
+            >
+                {{ isSubmitting() ? "Creating account..." : "Sign Up" }}
+            </button>
+        </div>
+        <p style="text-align: center">
+            Already have an account?
+            <a routerLink="/login" class="auth-link" style="color: var(--primary)">Login</a>
         </p>
     </form>
 </div>

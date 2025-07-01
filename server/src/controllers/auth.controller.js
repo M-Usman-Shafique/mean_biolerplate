@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { REFRESH_TOKEN_SECRET } from "../configs/config.js";
+import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from "../configs/config.js";
 import { User } from "../models/User.model.js";
 import { ROLES, cookieOptions } from "../constants.js";
 import { generateTokens } from "../utils/generateTokens.js";
@@ -91,22 +91,33 @@ export const logoutUser = async (req, res) => {
         .json(new ApiResponse(200, {}, "User logged out"));
 };
 
-export const refreshAccessToken = async (req, res) => {
+export const validateSession = (req, res) => {
+    const accessToken = req.cookies?.accessToken || req.body?.accessToken;
+
+    if (!accessToken) {
+        throw new ApiError(401, "Access token missing");
+    }
+
+    try {
+        jwt.verify(accessToken, ACCESS_TOKEN_SECRET);
+        return res.status(200).json(new ApiResponse(200, {}, "Session is valid"));
+    } catch (err) {
+        throw new ApiError(401, "Session is invalid or expired");
+    }
+};
+
+export const refreshSession = async (req, res) => {
     const incomingRefreshToken = req.cookies?.refreshToken || req.body?.refreshToken;
 
     if (!incomingRefreshToken) {
-        throw new ApiError(401, "unauthorized request");
+        throw new ApiError(401, "Unauthorized request");
     }
 
-    const decodedToken = jwt.verify(incomingRefreshToken, REFRESH_TOKEN_SECRET);
+    const decodedRefreshToken = jwt.verify(incomingRefreshToken, REFRESH_TOKEN_SECRET);
 
-    const user = await User.findById(decodedToken?._id);
+    const user = await User.findById(decodedRefreshToken?._id);
 
-    if (!user) {
-        throw new ApiError(401, "Invalid refresh token");
-    }
-
-    if (incomingRefreshToken !== user?.refreshToken) {
+    if (!user || incomingRefreshToken !== user.refreshToken) {
         throw new ApiError(401, "Refresh token is invalid or expired");
     }
 

@@ -1,29 +1,33 @@
-import { Component, signal } from "@angular/core";
+import { Component, OnInit, Signal, signal } from "@angular/core";
 import { ToggleThemeComponent } from "../toggle-theme/toggle-theme.component";
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { MatButtonModule } from "@angular/material/button";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatIconModule } from "@angular/material/icon";
 import { AuthService } from "../../core/services/auth.service";
 import { finalize } from "rxjs";
-import { clearData } from "../../core/utils/localstorage";
+import { clearStorage } from "../../core/utils/localstorage";
+import { NotificationService } from "../../core/services/notification.service";
 
 @Component({
     selector: "app-navbar",
-    imports: [ToggleThemeComponent, RouterLink, MatButtonModule],
+    imports: [ToggleThemeComponent, RouterLink, MatButtonModule, MatMenuModule, MatIconModule],
     templateUrl: "./navbar.component.html",
     styleUrl: "./navbar.component.scss",
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit {
     constructor(
-        private snackBar: MatSnackBar,
+        private notification: NotificationService,
         private authService: AuthService,
+        private router: Router
     ) {}
 
     protected brandName = "Softaims";
     protected isSubmitting = signal(false);
+    protected isLoggedIn!: Signal<boolean>;
 
-    get isLoggedIn(): boolean {
-        return this.authService.isLoggedIn();
+    ngOnInit(): void {
+        this.isLoggedIn = this.authService.isAuthenticated;
     }
 
     async handleLogout(): Promise<void> {
@@ -36,19 +40,17 @@ export class NavbarComponent {
             .pipe(finalize(() => this.isSubmitting.set(false)))
             .subscribe({
                 next: ({ message }: { message: string }) => {
-                    this.snackBar.open(message, "Close", { duration: 3000 });
-                    clearData("userInfo");
-
+                    this.notification.success(message);
+                    clearStorage("userInfo");
                     this.authService.setAuthState(false);
+                    this.router.navigate(["/login"]);
                 },
                 error: (error) => {
-                    this.snackBar.open(error?.error?.message || "Logout failed.", "Close", {
-                        duration: 3000,
-                    });
+                    this.notification.error(error?.message || "Logout failed.");
                     console.error(error);
                 },
                 complete: () => {
-                    console.log("Login successful...");
+                    console.log("Logout successful...");
                 },
             });
     }

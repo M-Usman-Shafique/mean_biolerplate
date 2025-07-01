@@ -35,7 +35,7 @@ export default defineConfig([
             ...angular.configs.recommended.rules,
             ...eslintConfigPrettier.rules,
             "prettier/prettier": "warn",
-            "no-console": "warn",
+            // "no-console": "warn",
             "no-unused-vars": "off",
             "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_" }],
         },
