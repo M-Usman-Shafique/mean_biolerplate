@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { RouterModule, RouterOutlet } from "@angular/router";
 import { ThemeService } from "./core/services/theme.service";
 import { AuthService } from "./core/services/auth.service";
+import { WebsocketService } from "./core/services/websocket.service";
 
 @Component({
     selector: "app-root",
@@ -12,10 +13,10 @@ import { AuthService } from "./core/services/auth.service";
 export class AppComponent implements OnInit {
     readonly title = "Softaims";
 
-    // Ensures theme initialization for all routes, including not-found and lazy loaded pages:
     constructor(
         private themeService: ThemeService,
-        private authService: AuthService
+        private authService: AuthService,
+        private websocketService: WebsocketService
     ) {}
 
     ngOnInit(): void {

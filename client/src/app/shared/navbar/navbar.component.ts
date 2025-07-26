@@ -49,7 +49,7 @@ export class NavbarComponent implements OnInit {
                     this.router.navigate(["/login"]);
                 },
                 error: (error) => {
-                    this.notification.error(error?.message || "Logout failed.");
+                    this.notification.error(error.error?.message || "Logout failed.");
                     console.error(error);
                 },
                 complete: () => {

@@ -105,7 +105,7 @@ export class SignupComponent {
                     redirectToReturnUrl(this.route, this.router);
                 },
                 error: (error) => {
-                    this.notification.error(error?.message || "Signup failed.");
+                    this.notification.error(error.error?.message || "Signup failed.");
                     console.error(error);
                 },
                 complete: () => {

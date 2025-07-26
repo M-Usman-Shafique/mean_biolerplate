@@ -81,7 +81,7 @@ export class LoginComponent {
                     redirectToReturnUrl(this.route, this.router);
                 },
                 error: (error) => {
-                    this.notification.error(error?.message || "Login failed.");
+                    this.notification.error(error.error?.message || "Login failed.");
                     console.error(error);
                 },
                 complete: () => {
