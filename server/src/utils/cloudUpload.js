@@ -1,6 +1,6 @@
 import { createReadStream } from "fs";
-import cloudinary from "../configs/cloudinary.js";
 import { unlinkHandler } from "./unlinkHandler.js";
+import cloudinary from "../services/cloudinary.js";
 
 export const cloudUpload = async (filePath) => {
     if (!filePath) return null;

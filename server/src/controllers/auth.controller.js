@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from "../configs/config.js";
 import { User } from "../models/User.model.js";
-import { ROLES, cookieOptions } from "../constants.js";
+import { ROLES, cookieOptions } from "../configs/constants.js";
 import { generateTokens } from "../utils/generateTokens.js";
 import { unlinkHandler } from "../utils/unlinkHandler.js";
 import { uploadHandler } from "../utils/uploadHandler.js";

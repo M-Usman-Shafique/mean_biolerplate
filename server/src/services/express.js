@@ -1,4 +1,4 @@
-import { NODE_ENV, PORT, CLIENT_URL } from "./config.js";
+import { NODE_ENV, PORT, CLIENT_URL } from "../configs/config.js";
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";

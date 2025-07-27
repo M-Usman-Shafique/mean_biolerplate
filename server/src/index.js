@@ -1,6 +1,6 @@
 import { API_URL, PORT } from "./configs/config.js";
-import connectDB from "./configs/mongodb.js";
-import { server } from "./configs/websocket.js";
+import connectDB from "./services/mongodb.js";
+import { server } from "./services/websocket.js";
 
 const port = PORT;
 const URL = API_URL;

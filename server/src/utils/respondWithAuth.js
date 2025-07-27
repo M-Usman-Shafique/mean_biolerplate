@@ -1,5 +1,5 @@
 import { User } from "../models/User.model.js";
-import { cookieOptions } from "../constants.js";
+import { cookieOptions } from "../configs/constants.js";
 import { generateTokens } from "./generateTokens.js";
 import { ApiResponse } from "./ApiResponse.js";
 

@@ -1,4 +1,7 @@
 - Nodemon
 - Eslint
 - Prettier
-- 
+- Husk
+- Cloudinary
+- Websocket
+-

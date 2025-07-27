@@ -1,6 +1,7 @@
-import { NODE_ENV } from "./configs/config.js";
+import { NODE_ENV } from "./config.js";
 
 const ROLES = ["User", "Admin"];
+
 const cookieOptions = {
     httpOnly: true,
     secure: NODE_ENV,
