@@ -7,6 +7,12 @@ export interface User {
 }
 
 export interface AuthResponse {
+    statusCode: number;
     message: string;
-    user: User;
+    success: boolean;
+    data: {
+        user: User;
+        accessToken: string;
+        refreshToken: string;
+    };
 }

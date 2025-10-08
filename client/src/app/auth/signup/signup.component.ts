@@ -1,4 +1,4 @@
-import { Component, signal } from "@angular/core";
+import { Component, inject, signal } from "@angular/core";
 import {
     AbstractControl,
     FormControl,
@@ -16,7 +16,7 @@ import { MatSelectModule } from "@angular/material/select";
 import { AuthService } from "../../core/services/auth.service";
 import { setToStorage } from "../../core/utils/localstorage.util";
 import { finalize } from "rxjs";
-import { AuthResponse } from "../../core/constants/types";
+import { AuthResponse } from "../../core/types/auth";
 import { NotificationService } from "../../core/services/notification.service";
 import { redirectToReturnUrl } from "../../core/utils/redirect.util";
 
@@ -35,12 +35,12 @@ import { redirectToReturnUrl } from "../../core/utils/redirect.util";
     styleUrl: "./signup.component.scss",
 })
 export class SignupComponent {
-    constructor(
-        private notification: NotificationService,
-        private authService: AuthService,
-        private router: Router,
-        private route: ActivatedRoute
-    ) {}
+    private notification = inject(NotificationService);
+    private authService = inject(AuthService);
+    private router = inject(Router);
+    private route = inject(ActivatedRoute);
+
+    constructor() {}
 
     isSubmitting = signal(false);
     userData: any;
@@ -93,9 +93,9 @@ export class SignupComponent {
             .signup(this.userData)
             .pipe(finalize(() => this.isSubmitting.set(false)))
             .subscribe({
-                next: ({ user, message }: AuthResponse) => {
-                    this.notification.success(message);
-                    setToStorage("userInfo", user);
+                next: (response: AuthResponse) => {
+                    this.notification.success(response.message);
+                    setToStorage("userInfo", response.data.user);
                     this.userData = null;
                     this.signupForm.reset();
                     Object.keys(this.signupForm.controls).forEach((key) =>

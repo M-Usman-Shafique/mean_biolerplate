@@ -1,6 +1,6 @@
 // src/configs/cloudinary.js
 import { v2 as cloudinary } from "cloudinary";
-import { CLOUDINARY } from "../configs/config.js";
+import { CLOUDINARY } from "../configs/config";
 
 cloudinary.config(CLOUDINARY);
 

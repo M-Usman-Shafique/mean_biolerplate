@@ -1,6 +1,16 @@
-import { NODE_ENV } from "../configs/config.js";
+import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
+import { NODE_ENV } from "../configs/config";
 
-export const errorHandler = (err, req, res, next) => {
+interface AppError extends Error {
+    statusCode?: number;
+}
+
+export const errorHandler: ErrorRequestHandler = (
+    err: AppError,
+    _req: Request,
+    res: Response,
+    _next: NextFunction
+) => {
     console.error(err);
 
     const statusCode = err.statusCode || 500;

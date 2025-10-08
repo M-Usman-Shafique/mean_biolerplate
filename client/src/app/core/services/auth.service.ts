@@ -2,10 +2,10 @@ import { inject, Injectable, signal } from "@angular/core";
 import { Observable, of } from "rxjs";
 import { ApiService } from "./api.service";
 import { apiRoutes } from "../../config/routes.config";
-import { AuthResponse } from "../constants/types";
 import { clearStorage } from "../utils/localstorage.util";
 import { filter, map, take } from "rxjs/operators";
 import { toObservable } from "@angular/core/rxjs-interop";
+import { AuthResponse } from "../types/auth";
 
 @Injectable({ providedIn: "root" })
 export class AuthService {

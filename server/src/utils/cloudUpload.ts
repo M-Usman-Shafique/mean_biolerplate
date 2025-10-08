@@ -1,8 +1,8 @@
 import { createReadStream } from "fs";
-import { unlinkHandler } from "./unlinkHandler.js";
-import cloudinary from "../services/cloudinary.js";
+import { unlinkHandler } from "./unlinkHandler";
+import cloudinary from "../services/cloudinary";
 
-export const cloudUpload = async (filePath) => {
+export const cloudUpload = async (filePath: string) => {
     if (!filePath) return null;
 
     try {
@@ -21,7 +21,7 @@ export const cloudUpload = async (filePath) => {
             });
         };
 
-        const response = await streamUpload();
+        const response = (await streamUpload()) as { secure_url: string };
         return response.secure_url;
     } catch (error) {
         console.error("Cloudinary Upload Error:", error);

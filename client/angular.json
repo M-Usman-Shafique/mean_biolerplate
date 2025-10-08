@@ -69,6 +69,14 @@
                                 "with": "src/environments/environment.development.ts"
                               }
                             ]
+                        },
+                        "websocket": {
+                            "fileReplacements": [
+                                {
+                                    "replace": "src/environments/environment.ts",
+                                    "with": "src/environments/environment.websocket.ts"
+                                }
+                            ]
                         }
                     },
                     "defaultConfiguration": "production"
@@ -84,6 +92,9 @@
                         },
                         "development": {
                             "buildTarget": "client:build:development"
+                        },
+                        "websocket": {
+                            "buildTarget": "client:build:websocket"
                         }
                     },
                     "defaultConfiguration": "development"

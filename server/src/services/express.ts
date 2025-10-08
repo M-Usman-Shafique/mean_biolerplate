@@ -1,10 +1,10 @@
-import { NODE_ENV, PORT, CLIENT_URL } from "../configs/config.js";
+import { NODE_ENV, PORT, CLIENT_URL } from "../configs/config";
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import logger from "morgan";
-import { errorHandler } from "../middlewares/errorHandler.middleware.js";
-import routes from "../routes/router.js";
+import { errorHandler } from "../middlewares/errorHandler.middleware";
+import routes from "../routes/router";
 import asyncHandler from "express-async-handler";
 
 const app = express();
@@ -20,7 +20,7 @@ app.use(errorHandler);
 
 app.get(
     "/",
-    asyncHandler((req, res) => {
+    asyncHandler((_req, res) => {
         res.status(200).send(`🚀  Express server is running at port ${PORT}`);
     })
 );

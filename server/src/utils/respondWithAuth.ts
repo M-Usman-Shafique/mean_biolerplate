@@ -1,9 +1,10 @@
-import { User } from "../models/User.model.js";
-import { cookieOptions } from "../configs/constants.js";
-import { generateTokens } from "./generateTokens.js";
-import { ApiResponse } from "./ApiResponse.js";
+import { User } from "../models/User.model";
+import { cookieOptions } from "../configs/constants";
+import { generateTokens } from "./generateTokens";
+import { ApiResponse } from "./ApiResponse";
+import { Response } from "express";
 
-export const respondWithAuth = async (res, userId, message = "Authenticated") => {
+export const respondWithAuth = async (res: Response, userId: string, message = "Authenticated") => {
     const { accessToken, refreshToken } = await generateTokens(userId);
     const user = await User.findById(userId).select("-password -refreshToken");
 

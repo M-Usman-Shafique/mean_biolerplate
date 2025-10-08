@@ -1,6 +1,6 @@
 import fs from "fs/promises";
 
-export const unlinkHandler = async (filePath) => {
+export const unlinkHandler = async (filePath: string) => {
     try {
         await fs.unlink(filePath);
     } catch (err) {

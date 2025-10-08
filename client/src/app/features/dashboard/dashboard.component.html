@@ -1,4 +1,7 @@
 <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.25rem; height: 100vh;">
     <h1 class="gradient-text">DASHBOARD</h1>
-    <button matButton="outlined" routerLink="/">Go Back</button>
+    <div style="display: flex; align-items: center; gap: 10px;">
+        <button mat-flat-button (click)="checkout()">Checkout</button>
+        <button matButton="outlined" routerLink="/">Go Back</button>
+    </div>
 </div>

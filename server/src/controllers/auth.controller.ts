@@ -1,15 +1,16 @@
 import jwt from "jsonwebtoken";
-import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from "../configs/config.js";
-import { User } from "../models/User.model.js";
-import { ROLES, cookieOptions } from "../configs/constants.js";
-import { generateTokens } from "../utils/generateTokens.js";
-import { unlinkHandler } from "../utils/unlinkHandler.js";
-import { uploadHandler } from "../utils/uploadHandler.js";
-import { ApiResponse } from "../utils/ApiResponse.js";
-import { ApiError } from "../utils/ApiError.js";
-import { respondWithAuth } from "../utils/respondWithAuth.js";
+import { ACCESS_TOKEN_SECRET, REFRESH_TOKEN_SECRET } from "../configs/config";
+import { User } from "../models/User.model";
+import { ROLES, cookieOptions } from "../configs/constants";
+import { generateTokens } from "../utils/generateTokens";
+import { unlinkHandler } from "../utils/unlinkHandler";
+import { uploadHandler } from "../utils/uploadHandler";
+import { ApiResponse } from "../utils/ApiResponse";
+import { ApiError } from "../utils/ApiError";
+import { respondWithAuth } from "../utils/respondWithAuth";
+import type { NextFunction, Request, Response } from "express";
 
-export const signupUser = async (req, res, next) => {
+export const signupUser = async (req: Request, res: Response, next: NextFunction) => {
     const filePath = req.file?.path;
     try {
         const { username, email, password, role } = req.body;
@@ -42,9 +43,9 @@ export const signupUser = async (req, res, next) => {
 
         if (!newUser) throw new ApiError(500, "Failed to create user.");
 
-        return await respondWithAuth(
+        await respondWithAuth(
             res,
-            newUser._id,
+            newUser._id.toString(),
             "User registered and logged in successfully."
         );
     } catch (error) {
@@ -53,7 +54,7 @@ export const signupUser = async (req, res, next) => {
     }
 };
 
-export const loginUser = async (req, res) => {
+export const loginUser = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     if (!email) {
@@ -72,10 +73,10 @@ export const loginUser = async (req, res) => {
         throw new ApiError(401, "Invalid user credentials");
     }
 
-    return await respondWithAuth(res, user._id, "User logged in successfully");
+    await respondWithAuth(res, user._id.toString(), "User logged in successfully");
 };
 
-export const logoutUser = async (req, res) => {
+export const logoutUser = async (req: Request, res: Response) => {
     const userId = req.user?._id;
 
     if (!userId) {
@@ -84,14 +85,13 @@ export const logoutUser = async (req, res) => {
 
     await User.findByIdAndUpdate(userId, { $unset: { refreshToken: 1 } }, { new: true });
 
-    return res
-        .status(200)
+    res.status(200)
         .clearCookie("accessToken", cookieOptions)
         .clearCookie("refreshToken", cookieOptions)
         .json(new ApiResponse(200, {}, "User logged out"));
 };
 
-export const validateAuth = (req, res) => {
+export const validateAuth = (req: Request, res: Response) => {
     const accessToken = req.cookies?.accessToken || req.body?.accessToken;
 
     if (!accessToken) {
@@ -100,31 +100,34 @@ export const validateAuth = (req, res) => {
 
     try {
         jwt.verify(accessToken, ACCESS_TOKEN_SECRET);
-        return res.status(200).json(new ApiResponse(200, {}, "Session is valid"));
+        res.status(200).json(new ApiResponse(200, {}, "Session is valid"));
     } catch (err) {
         throw new ApiError(401, "Session is invalid or expired");
     }
 };
 
-export const refreshAuth = async (req, res) => {
+export const refreshAuth = async (req: Request, res: Response) => {
     const incomingRefreshToken = req.cookies?.refreshToken || req.body?.refreshToken;
 
     if (!incomingRefreshToken) {
         throw new ApiError(401, "Unauthorized request");
     }
 
-    const decodedRefreshToken = jwt.verify(incomingRefreshToken, REFRESH_TOKEN_SECRET);
+    const decodedRefreshToken = jwt.verify(incomingRefreshToken, REFRESH_TOKEN_SECRET) as {
+        _id: string;
+    };
 
-    const user = await User.findById(decodedRefreshToken?._id);
+    const user = await User.findById(decodedRefreshToken._id);
 
     if (!user || incomingRefreshToken !== user.refreshToken) {
         throw new ApiError(401, "Refresh token is invalid or expired");
     }
 
-    const { accessToken, newRefreshToken } = await generateTokens(user._id);
+    const { accessToken, refreshToken: newRefreshToken } = await generateTokens(
+        user._id.toString()
+    );
 
-    return res
-        .status(200)
+    res.status(200)
         .cookie("accessToken", accessToken, cookieOptions)
         .cookie("refreshToken", newRefreshToken, cookieOptions)
         .json(

@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, inject, OnInit } from "@angular/core";
 import { RouterModule, RouterOutlet } from "@angular/router";
 import { ThemeService } from "./core/services/theme.service";
 import { AuthService } from "./core/services/auth.service";
@@ -12,12 +12,11 @@ import { WebsocketService } from "./core/services/websocket.service";
 })
 export class AppComponent implements OnInit {
     readonly title = "Softaims";
+    private themeService = inject(ThemeService);
+    private authService = inject(AuthService);
+    private websocketService = inject(WebsocketService);
 
-    constructor(
-        private themeService: ThemeService,
-        private authService: AuthService,
-        private websocketService: WebsocketService
-    ) {}
+    constructor() {}
 
     ngOnInit(): void {
         this.authService.validateAuth();

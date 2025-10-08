@@ -1,14 +1,14 @@
 import { Router } from "express";
 import asyncHandler from "express-async-handler";
-import { upload } from "../middlewares/multer.middleware.js";
-import { verifyAuth } from "../middlewares/verifyAuth.middleware.js";
+import { verifyAuth } from "../middlewares/verifyAuth.middleware";
 import {
     signupUser,
     loginUser,
     logoutUser,
     validateAuth,
     refreshAuth,
-} from "../controllers/auth.controller.js";
+} from "../controllers/auth.controller";
+import { upload } from "../middlewares/multer.middleware";
 
 const router = Router();
 

@@ -1,6 +1,6 @@
 export const environment = {
     production: false,
-    apiUrl: "https://staging.yourdomain.com",
+    apiUrl: "http://localhost:3000",
     featureFlag: true,
-    useWebSocket: false,
+    useWebSocket: true,
 };

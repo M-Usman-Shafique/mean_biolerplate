@@ -1,6 +1,6 @@
 import { Server } from "socket.io";
 import http from "http";
-import app from "./express.js";
+import app from "./express";
 
 const server = http.createServer(app);
 
@@ -11,7 +11,7 @@ const io = new Server(server, {
     },
 });
 
-const userSocketMap = {};
+const userSocketMap: Record<string, string> = {};
 
 io.on("connection", (socket) => {
     console.warn(`📌 User ${socket.id} connected`);
@@ -21,18 +21,22 @@ io.on("connection", (socket) => {
     });
 
     const userId = socket.handshake.query.userId;
-    if (userId) userSocketMap[userId] = socket.id;
+    if (typeof userId === "string") {
+        userSocketMap[userId] = socket.id;
+    }
 
     io.emit("getOnlineUsers", Object.keys(userSocketMap));
 
     socket.on("disconnect", () => {
         console.warn(`✂️  User ${socket.id} disconnected`);
-        delete userSocketMap[userId];
+        if (typeof userId === "string") {
+            delete userSocketMap[userId];
+        }
         io.emit("getOnlineUsers", Object.keys(userSocketMap));
     });
 });
 
-export function getReceiverSocketId(userId) {
+export function getReceiverSocketId(userId: string): string | undefined {
     return userSocketMap[userId];
 }
 

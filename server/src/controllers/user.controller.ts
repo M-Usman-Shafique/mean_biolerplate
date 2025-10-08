@@ -1,9 +1,10 @@
-import { User } from "../models/User.model.js";
-import { uploadHandler } from "../utils/uploadHandler.js";
-import { ApiResponse } from "../utils/ApiResponse.js";
-import { ApiError } from "../utils/ApiError.js";
+import { User } from "../models/User.model";
+import { uploadHandler } from "../utils/uploadHandler";
+import { ApiResponse } from "../utils/ApiResponse";
+import { ApiError } from "../utils/ApiError";
+import { Request, Response } from "express";
 
-export const updateAvatar = async (req, res) => {
+export const updateAvatar = async (req: Request, res: Response) => {
     const userId = req.user?._id;
 
     if (!userId) {
@@ -32,7 +33,7 @@ export const updateAvatar = async (req, res) => {
         throw new ApiError(500, "Failed to update user avatar");
     }
 
-    return res
-        .status(200)
-        .json(new ApiResponse(200, { avatar: updatedAvatar }, "Avatar updated successfully"));
+    res.status(200).json(
+        new ApiResponse(200, { avatar: updatedAvatar }, "Avatar updated successfully")
+    );
 };

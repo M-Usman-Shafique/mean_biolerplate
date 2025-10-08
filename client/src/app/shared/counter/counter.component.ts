@@ -1,4 +1,4 @@
-import { Component, signal } from "@angular/core";
+import { Component, inject, signal } from "@angular/core";
 import { Store } from "@ngrx/store";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
@@ -15,8 +15,9 @@ import { decrement, increment, reset } from "../../store/counter/counter.actions
 })
 export class counterComponent {
     counter = signal(0);
+    private store = inject(Store<AppState>);
 
-    constructor(private store: Store<AppState>) {
+    constructor() {
         this.store.select(selectCounter).subscribe((value) => this.counter.set(value));
     }
 

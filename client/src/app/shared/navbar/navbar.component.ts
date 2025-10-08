@@ -1,4 +1,4 @@
-import { Component, OnInit, Signal, signal } from "@angular/core";
+import { Component, inject, OnInit, Signal, signal } from "@angular/core";
 import { ToggleThemeComponent } from "../toggle-theme/toggle-theme.component";
 import { Router, RouterLink } from "@angular/router";
 import { MatButtonModule } from "@angular/material/button";
@@ -8,7 +8,7 @@ import { AuthService } from "../../core/services/auth.service";
 import { finalize } from "rxjs";
 import { clearStorage, getFromStorage } from "../../core/utils/localstorage.util";
 import { NotificationService } from "../../core/services/notification.service";
-import { User } from "../../core/constants/types";
+import { User } from "../../core/types/auth";
 
 @Component({
     selector: "app-navbar",
@@ -17,11 +17,11 @@ import { User } from "../../core/constants/types";
     styleUrl: "./navbar.component.scss",
 })
 export class NavbarComponent implements OnInit {
-    constructor(
-        private notification: NotificationService,
-        private authService: AuthService,
-        private router: Router
-    ) {}
+    private notification = inject(NotificationService);
+    private authService = inject(AuthService);
+    private router = inject(Router);
+
+    constructor() {}
 
     protected brandName = "Softaims";
     protected isSubmitting = signal(false);

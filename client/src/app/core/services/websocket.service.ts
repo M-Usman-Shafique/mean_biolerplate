@@ -6,9 +6,11 @@ import { environment } from "../../../environments/environment";
     providedIn: "root",
 })
 export class WebsocketService {
-    private socket: Socket;
+    private socket: Socket | null = null;
 
     constructor() {
-        this.socket = io(environment.apiUrl);
+        if (environment.useWebSocket) {
+            this.socket = io(environment.apiUrl);
+        }
     }
 }

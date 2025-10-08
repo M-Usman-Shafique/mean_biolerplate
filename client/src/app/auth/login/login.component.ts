@@ -1,4 +1,4 @@
-import { Component, signal } from "@angular/core";
+import { Component, inject, signal } from "@angular/core";
 import {
     AbstractControl,
     FormControl,
@@ -16,7 +16,7 @@ import { ActivatedRoute, Router, RouterLink } from "@angular/router";
 import { AuthService } from "../../core/services/auth.service";
 import { finalize } from "rxjs";
 import { setToStorage } from "../../core/utils/localstorage.util";
-import { AuthResponse } from "../../core/constants/types";
+import { AuthResponse } from "../../core/types/auth";
 import { NotificationService } from "../../core/services/notification.service";
 import { redirectToReturnUrl } from "../../core/utils/redirect.util";
 
@@ -35,12 +35,12 @@ import { redirectToReturnUrl } from "../../core/utils/redirect.util";
     styleUrl: "./login.component.scss",
 })
 export class LoginComponent {
-    constructor(
-        private notification: NotificationService,
-        private authService: AuthService,
-        private router: Router,
-        private route: ActivatedRoute
-    ) {}
+    private notification = inject(NotificationService);
+    private authService = inject(AuthService);
+    private router = inject(Router);
+    private route = inject(ActivatedRoute);
+
+    constructor() {}
 
     isSubmitting = signal(false);
     userData: any;
@@ -69,9 +69,9 @@ export class LoginComponent {
             .login(this.userData)
             .pipe(finalize(() => this.isSubmitting.set(false)))
             .subscribe({
-                next: ({ user, message }: AuthResponse) => {
-                    this.notification.success(message);
-                    setToStorage("userInfo", user);
+                next: (response: AuthResponse) => {
+                    this.notification.success(response.message);
+                    setToStorage("userInfo", response.data.user);
                     this.loginForm.reset();
                     this.userData = null;
                     Object.keys(this.loginForm.controls).forEach((key) =>

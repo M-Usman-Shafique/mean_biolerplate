@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { type CallbackError } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import {
@@ -6,9 +6,10 @@ import {
     ACCESS_TOKEN_SECRET,
     REFRESH_TOKEN_EXPIRY,
     REFRESH_TOKEN_SECRET,
-} from "../configs/config.js";
+} from "../configs/config";
+import { IUser, IUserMethods, UserModel } from "../types/user";
 
-const userSchema = new mongoose.Schema(
+const userSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>(
     {
         username: {
             type: String,
@@ -55,39 +56,27 @@ userSchema.pre("save", async function (next) {
         const salt = await bcrypt.genSalt(10);
         this.password = await bcrypt.hash(this.password, salt);
         next();
-    } catch (error) {
-        next(error);
+    } catch (error: unknown) {
+        next(error as CallbackError);
     }
 });
 
 // Method to check if password is correct
-userSchema.methods.isPasswordValid = async function (password) {
+userSchema.methods.isPasswordValid = async function (password: string) {
     return await bcrypt.compare(password, this.password);
 };
 
-userSchema.methods.generateAccessToken = function () {
-    return jwt.sign(
-        {
-            _id: this._id,
-        },
-        ACCESS_TOKEN_SECRET,
-        {
-            expiresIn: ACCESS_TOKEN_EXPIRY,
-        }
-    );
+userSchema.methods.generateAccessToken = function (): string {
+    return jwt.sign({ _id: this._id }, ACCESS_TOKEN_SECRET, {
+        expiresIn: ACCESS_TOKEN_EXPIRY,
+    } as jwt.SignOptions);
 };
 
 userSchema.methods.generateRefreshToken = function () {
     return jwt.sign(
-        {
-            _id: this._id,
-            username: this.username,
-            email: this.email,
-        },
+        { _id: this._id, username: this.username, email: this.email },
         REFRESH_TOKEN_SECRET,
-        {
-            expiresIn: REFRESH_TOKEN_EXPIRY,
-        }
+        { expiresIn: REFRESH_TOKEN_EXPIRY } as jwt.SignOptions
     );
 };
 
