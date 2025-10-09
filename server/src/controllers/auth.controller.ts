@@ -91,17 +91,19 @@ export const logoutUser = async (req: Request, res: Response) => {
         .json(new ApiResponse(200, {}, "User logged out"));
 };
 
-export const validateAuth = (req: Request, res: Response) => {
+export const validateAuth = async (req: Request, res: Response) => {
     const accessToken = req.cookies?.accessToken || req.body?.accessToken;
-
-    if (!accessToken) {
-        throw new ApiError(401, "Access token missing");
-    }
+    if (!accessToken) throw new ApiError(401, "Access token missing");
 
     try {
-        jwt.verify(accessToken, ACCESS_TOKEN_SECRET);
+        const decoded = jwt.verify(accessToken, ACCESS_TOKEN_SECRET) as { _id: string };
+        const user = await User.findById(decoded._id);
+
+        if (!user) throw new ApiError(401, "User not found or deleted");
+
         res.status(200).json(new ApiResponse(200, {}, "Session is valid"));
     } catch (err) {
+        console.error(err);
         throw new ApiError(401, "Session is invalid or expired");
     }
 };

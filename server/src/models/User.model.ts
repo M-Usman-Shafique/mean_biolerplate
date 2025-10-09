@@ -1,4 +1,4 @@
-import mongoose, { type CallbackError } from "mongoose";
+import mongoose, { Model, type CallbackError } from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import {
@@ -9,7 +9,7 @@ import {
 } from "../configs/config";
 import { IUser, IUserMethods, UserModel } from "../types/user";
 
-const userSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>(
+const userSchema = new mongoose.Schema<IUser, Model<UserModel>, IUserMethods>(
     {
         username: {
             type: String,

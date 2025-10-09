@@ -1,5 +1,6 @@
 import { Model } from "mongoose";
 import { ROLES } from "../configs/constants";
+import mongoose from "mongoose";
 
 export interface IUser {
     _id: string;
@@ -7,8 +8,8 @@ export interface IUser {
     email: string;
     password: string;
     role: "User" | "Admin";
-    avatar: string;
-    refreshToken: string;
+    avatar?: string;
+    refreshToken?: string;
 }
 
 export interface IUserMethods {
@@ -17,7 +18,9 @@ export interface IUserMethods {
     generateRefreshToken(): string;
 }
 
-export type UserModel = Model<IUser, object, IUserMethods>;
+export type UserDocument = mongoose.Document & IUser & IUserMethods;
+
+export type UserModel = Model<UserDocument>;
 
 export type Role = (typeof ROLES)[number];
 
