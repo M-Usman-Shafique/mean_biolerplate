@@ -1,24 +1,20 @@
 import { Injectable, computed, effect, signal } from "@angular/core";
+import { Theme, ThemeOption } from "../types/theme";
 
-export type Theme = "dark" | "light" | "system";
-export interface ThemeOption {
-    name: Theme;
-    icon: string;
-}
-const validThemes: Theme[] = ["light", "dark", "system"];
+const themes: Theme[] = ["light", "dark", "system"];
 
 @Injectable({ providedIn: "root" })
 export class ThemeService {
     private readonly currentTheme = signal<Theme>("system");
 
-    private readonly themes: ThemeOption[] = [
+    private readonly themesMap: ThemeOption[] = [
         { name: "light", icon: "light_mode" },
         { name: "dark", icon: "bedtime" },
         { name: "system", icon: "computer" },
     ];
 
     readonly selectedTheme = computed(() =>
-        this.themes.find((t) => t.name === this.currentTheme())
+        this.themesMap.find((t) => t.name === this.currentTheme())
     );
 
     constructor() {
@@ -35,7 +31,7 @@ export class ThemeService {
     }
 
     getThemes(): ThemeOption[] {
-        return this.themes;
+        return this.themesMap;
     }
 
     setTheme(theme: Theme) {
@@ -44,6 +40,6 @@ export class ThemeService {
     }
 
     private isValidTheme(value: any): value is Theme {
-        return validThemes.includes(value);
+        return themes.includes(value);
     }
 }

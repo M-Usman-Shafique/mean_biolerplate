@@ -9,7 +9,7 @@ import { AuthResponse } from "../types/auth";
 
 @Injectable({ providedIn: "root" })
 export class AuthService {
-    private api = inject(ApiService);
+    private apiService = inject(ApiService);
 
     isAuthenticated = signal(false);
     private isValidating = false;
@@ -24,15 +24,15 @@ export class AuthService {
     }
 
     signup(payload: any): Observable<AuthResponse> {
-        return this.api.post<AuthResponse>(apiRoutes.signup, payload);
+        return this.apiService.post<AuthResponse>(apiRoutes.signup, payload);
     }
 
     login(payload: any): Observable<AuthResponse> {
-        return this.api.post<AuthResponse>(apiRoutes.login, payload);
+        return this.apiService.post<AuthResponse>(apiRoutes.login, payload);
     }
 
     logout(): Observable<{ message: string }> {
-        return this.api.post<{ message: string }>(apiRoutes.logout, {});
+        return this.apiService.post<{ message: string }>(apiRoutes.logout, {});
     }
 
     private completeValidation(authenticated: boolean): void {
@@ -44,7 +44,7 @@ export class AuthService {
         if (this.isValidating) return;
         this.isValidating = true;
 
-        this.api.get(apiRoutes.validateAuth).subscribe({
+        this.apiService.get(apiRoutes.validateAuth).subscribe({
             next: () => this.completeValidation(true),
             error: () => {
                 console.warn("Session expired, trying refresh...");
@@ -64,7 +64,7 @@ export class AuthService {
     }
 
     refreshAuth(): Observable<{ accessToken: string }> {
-        return this.api.post<{ accessToken: string }>(apiRoutes.refreshAuth, {});
+        return this.apiService.post<{ accessToken: string }>(apiRoutes.refreshAuth, {});
     }
 
     authReady(): Observable<boolean> {

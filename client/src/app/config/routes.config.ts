@@ -7,4 +7,6 @@ export const apiRoutes = {
     logout: "auth/logout",
     validateAuth: "auth/validate",
     refreshAuth: "auth/refresh",
+    checkout: "checkout",
+    verifyStripeSession: "checkout/success",
 };

@@ -30,7 +30,7 @@ export const checkout = async (req: Request<object, object, CheckoutBody>, res: 
             line_items: products,
             mode: "payment",
             success_url: `${CLIENT_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${CLIENT_URL}`,
+            cancel_url: `${CLIENT_URL}/dashboard`,
             metadata: {
                 userId,
                 totalPrice: totalPrice.toFixed(2),
@@ -50,4 +50,14 @@ export const checkout = async (req: Request<object, object, CheckoutBody>, res: 
         console.error(error);
         throw new ApiError(500, "Checkout failed. Please try again later.");
     }
+};
+
+export const verifyStripeSession = async (req: Request, res: Response) => {
+    const { session_id } = req.body;
+
+    const session = await stripe.checkout.sessions.retrieve(session_id);
+    if (!session) {
+        throw new ApiError(404, "Stripe session not found.");
+    }
+    res.status(200).json(new ApiResponse(200, { session }, "Stripe session verified."));
 };

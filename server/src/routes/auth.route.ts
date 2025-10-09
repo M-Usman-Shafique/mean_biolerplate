@@ -1,6 +1,5 @@
 import { Router } from "express";
 import asyncHandler from "express-async-handler";
-import { verifyAuth } from "../middlewares/verifyAuth.middleware";
 import {
     signupUser,
     loginUser,
@@ -9,6 +8,7 @@ import {
     refreshAuth,
 } from "../controllers/auth.controller";
 import { upload } from "../middlewares/multer.middleware";
+import { verifyAuth } from "../middlewares/verifyAuth.middleware";
 
 const router = Router();
 

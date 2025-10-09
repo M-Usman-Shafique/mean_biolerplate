@@ -1,7 +1,9 @@
-<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.25rem; height: 100vh;">
+<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.25rem; min-height: 100vh;">
     <h1 class="gradient-text">DASHBOARD</h1>
     <div style="display: flex; align-items: center; gap: 10px;">
-        <button mat-flat-button (click)="checkout()">Checkout</button>
         <button matButton="outlined" routerLink="/">Go Back</button>
+        <button mat-flat-button (click)="onCheckout()" [disabled]="isWaiting()">
+            {{ isWaiting() ? "Checking out..." : "Checkout" }}
+        </button>
     </div>
 </div>

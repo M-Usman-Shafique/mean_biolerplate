@@ -1,4 +1,3 @@
-// app.routes.ts
 import { Routes } from "@angular/router";
 import { MainLayoutComponent } from "./layout/main-layout/main-layout.component";
 import { AuthLayoutComponent } from "./layout/auth-layout/auth-layout.component";
@@ -24,6 +23,12 @@ export const routes: Routes = [
                     import("./features/dashboard/dashboard.component").then(
                         (m) => m.DashboardComponent
                     ),
+            },
+            {
+                path: "success",
+                title: "Success",
+                loadComponent: () =>
+                    import("./features/success/success.component").then((m) => m.SuccessComponent),
             },
         ],
     },
