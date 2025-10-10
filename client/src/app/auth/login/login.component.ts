@@ -71,13 +71,12 @@ export class LoginComponent {
             .subscribe({
                 next: (response: AuthResponse) => {
                     this.notification.success(response.message);
-                    setToStorage("userInfo", response.data.user);
                     this.loginForm.reset();
                     this.userData = null;
                     Object.keys(this.loginForm.controls).forEach((key) =>
                         this.loginForm.get(key)?.setErrors(null)
                     );
-                    this.authService.setAuthState(true);
+                    this.authService.setAuthState(true, response.data.user);
                     redirectToReturnUrl(this.route, this.router);
                 },
                 error: (error) => {

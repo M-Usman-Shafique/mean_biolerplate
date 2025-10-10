@@ -2,25 +2,46 @@ import { inject, Injectable, signal } from "@angular/core";
 import { Observable, of } from "rxjs";
 import { ApiService } from "./api.service";
 import { apiRoutes } from "../../config/routes.config";
-import { clearStorage } from "../utils/localstorage.util";
+import { clearStorage, getFromStorage, setToStorage } from "../utils/localstorage.util";
 import { filter, map, take } from "rxjs/operators";
 import { toObservable } from "@angular/core/rxjs-interop";
-import { AuthResponse } from "../types/auth";
+import { AuthResponse, User } from "../types/auth";
 
 @Injectable({ providedIn: "root" })
 export class AuthService {
     private apiService = inject(ApiService);
 
     isAuthenticated = signal(false);
+    currentUser = signal<User | null>(null);
     private isValidating = false;
     private hasValidated = signal(false);
 
-    setAuthState(value: boolean): void {
+    setAuthState(value: boolean, user?: User): void {
         this.isAuthenticated.set(value);
+        if (user) {
+            this.currentUser.set(user);
+            setToStorage("userInfo", user);
+        } else {
+            this.currentUser.set(null);
+        }
     }
 
     isLoggedIn(): boolean {
         return this.isAuthenticated();
+    }
+
+    isAdmin(): boolean {
+        const user = this.currentUser();
+        return user?.role === "admin";
+    }
+
+    isUser(): boolean {
+        const user = this.currentUser();
+        return user?.role === "user";
+    }
+
+    getCurrentUser(): User | null {
+        return this.currentUser();
     }
 
     signup(payload: any): Observable<AuthResponse> {
@@ -36,7 +57,12 @@ export class AuthService {
     }
 
     private completeValidation(authenticated: boolean): void {
-        this.setAuthState(authenticated);
+        if (authenticated) {
+            const userInfo = getFromStorage<User>("userInfo");
+            this.setAuthState(authenticated, userInfo || undefined);
+        } else {
+            this.setAuthState(authenticated);
+        }
         this.hasValidated.set(true);
     }
 

@@ -95,13 +95,12 @@ export class SignupComponent {
             .subscribe({
                 next: (response: AuthResponse) => {
                     this.notification.success(response.message);
-                    setToStorage("userInfo", response.data.user);
                     this.userData = null;
                     this.signupForm.reset();
                     Object.keys(this.signupForm.controls).forEach((key) =>
                         this.signupForm.get(key)?.setErrors(null)
                     );
-                    this.authService.setAuthState(true);
+                    this.authService.setAuthState(true, response.data.user);
                     redirectToReturnUrl(this.route, this.router);
                 },
                 error: (error) => {

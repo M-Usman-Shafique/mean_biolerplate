@@ -11,7 +11,12 @@
     ></div>
 
     <div style="display: flex; align-items: center; gap: 1rem;">
-        <button mat-flat-button [routerLink]="'/dashboard'">Dashboard</button>
-        <button mat-flat-button [routerLink]="'/profile'">Profile</button>
+        @if (isAdmin) {
+            <button mat-flat-button [routerLink]="'/dashboard'">Dashboard</button>
+        }
+        @if (isUser) {
+            <button mat-flat-button [routerLink]="'/profile'">Profile</button>
+        }
+        <button mat-flat-button [routerLink]="'/products'">Products</button>
     </div>
 </main>

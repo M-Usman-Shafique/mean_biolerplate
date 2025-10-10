@@ -32,8 +32,8 @@ const userSchema = new mongoose.Schema<IUser, Model<UserModel>, IUserMethods>(
         },
         role: {
             type: String,
-            enum: ["User", "Admin"],
-            default: "User",
+            enum: ["user", "admin"],
+            default: "user",
         },
         avatar: {
             type: String,

@@ -4,6 +4,8 @@ import { AuthLayoutComponent } from "./layout/auth-layout/auth-layout.component"
 import { HomeComponent } from "./features/home/home.component";
 import { authGuard } from "./core/guards/auth.guard";
 import { guestGuard } from "./core/guards/guest.guard";
+import { adminGuard } from "./core/guards/admin.guard";
+import { userGuard } from "./core/guards/user.guard";
 
 export const routes: Routes = [
     {
@@ -25,8 +27,16 @@ export const routes: Routes = [
                     ),
             },
             {
+                path: "profile",
+                title: "Profile",
+                canActivate: [userGuard],
+                loadComponent: () =>
+                    import("./features/profile/profile.component").then((m) => m.ProfileComponent),
+            },
+            {
                 path: "dashboard",
                 title: "Dashboard",
+                canActivate: [adminGuard],
                 loadComponent: () =>
                     import("./features/dashboard/dashboard.component").then(
                         (m) => m.DashboardComponent
