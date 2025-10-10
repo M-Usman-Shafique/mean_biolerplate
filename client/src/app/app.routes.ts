@@ -17,6 +17,14 @@ export const routes: Routes = [
                 component: HomeComponent,
             },
             {
+                path: "products",
+                title: "Products",
+                loadComponent: () =>
+                    import("./features/products/products.component").then(
+                        (m) => m.ProductsComponent
+                    ),
+            },
+            {
                 path: "dashboard",
                 title: "Dashboard",
                 loadComponent: () =>
