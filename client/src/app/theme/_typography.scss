@@ -1,18 +1,21 @@
 @use "@angular/material" as mat;
 
-:root, :host {
+:root,
+:host {
     /* core typography tokens are not generating css variables, hence below */
     --mat-sys-brand-font-family: Roboto;
     --mat-sys-plain-font-family: Roboto;
     --mat-sys-bold-font-weight: 700;
     --mat-sys-medium-font-weight: 500;
     --mat-sys-regular-font-weight: 400;
-  
-    @include mat.theme-overrides((
-      brand-family: Roboto,
-      plain-family: Roboto,
-      bold-weight: 700,
-      medium-weight: 500,
-      regular-weight: 400,
-    ));
-  }
+
+    @include mat.theme-overrides(
+        (
+            brand-family: Roboto,
+            plain-family: Roboto,
+            bold-weight: 700,
+            medium-weight: 500,
+            regular-weight: 400,
+        )
+    );
+}
