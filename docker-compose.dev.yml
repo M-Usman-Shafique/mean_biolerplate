@@ -1,0 +1,40 @@
+services:
+  server:
+    image: node:20-alpine
+    working_dir: /app
+    container_name: express_server_dev
+    command: sh -c "npm ci && npm run dev"
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+    env_file:
+      - server/.env.dev
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+      - ./server/uploads:/app/uploads
+    restart: unless-stopped
+    networks:
+      - app-network
+
+  client:
+    image: node:20-alpine
+    working_dir: /app
+    container_name: angular_client_dev
+    command: sh -c "npm ci --legacy-peer-deps && npm run start -- --host 0.0.0.0"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    ports:
+      - "4200:4200"
+    restart: unless-stopped
+    depends_on:
+      - server
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
