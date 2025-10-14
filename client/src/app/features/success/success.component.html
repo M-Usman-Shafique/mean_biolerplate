@@ -1,0 +1,14 @@
+<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.25rem; min-height: calc(100vh - 192px);">
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <h1>🎉</h1>
+            <h1 class="gradient-text">Order Successful</h1>
+        </div>
+        <p class="gradient-text">Thank you for your purchase.</p>
+
+        @if (sessionId()) {
+          <p>
+            Session ID: {{ sessionId() }}
+          </p>
+        }
+        <button matButton="outlined" routerLink="/">Go Back Home</button>
+</div>

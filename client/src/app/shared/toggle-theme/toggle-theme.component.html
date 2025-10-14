@@ -1,0 +1,10 @@
+<button
+    mat-icon-button
+    [matTooltip]="selectedTheme()?.name + ' Theme' | titlecase"
+    (click)="cycleTheme()"
+    aria-label="Toggle theme"
+>
+    <mat-icon style="color: var(--primary);">
+        {{ selectedTheme()?.icon }}
+    </mat-icon>
+</button>

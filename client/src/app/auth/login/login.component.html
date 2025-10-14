@@ -1,0 +1,89 @@
+<div class="form-container">
+    <form [formGroup]="loginForm" (ngSubmit)="handleLogin()" class="login-form">
+        <h2 class="gradient-text" style="text-align: center; font-size: 1.75rem">Login</h2>
+
+        <!-- Email -->
+        <mat-form-field appearance="outline" [hideRequiredMarker]="true" class="form-field">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="email" />
+            @if (loginForm.get("email")?.touched && loginForm.get("email")?.hasError("required")) {
+                <mat-error class="field-error">
+                    <mat-icon
+                        aria-hidden="false"
+                        aria-label="error icon"
+                        fontIcon="error_outline"
+                        style="font-size: 0.875rem"
+                    ></mat-icon>
+                    Email is required
+                </mat-error>
+            } @else if (
+                loginForm.get("email")?.touched && loginForm.get("email")?.hasError("email")
+            ) {
+                <mat-error class="field-error">
+                    <mat-icon
+                        aria-hidden="false"
+                        aria-label="error icon"
+                        fontIcon="error_outline"
+                        style="font-size: 0.875rem"
+                    ></mat-icon>
+                    Please enter a valid email address
+                </mat-error>
+            }
+        </mat-form-field>
+
+        <!-- Password -->
+        <mat-form-field appearance="outline" [hideRequiredMarker]="true" class="form-field">
+            <mat-label>Password</mat-label>
+            <input matInput type="password" formControlName="password" />
+            @if (
+                loginForm.get("password")?.touched &&
+                loginForm.get("password")?.hasError("required")
+            ) {
+                <mat-error class="field-error">
+                    <mat-icon
+                        aria-hidden="false"
+                        aria-label="error icon"
+                        fontIcon="error_outline"
+                        style="font-size: 0.875rem"
+                    ></mat-icon>
+                    Password is required
+                </mat-error>
+            } @else if (
+                loginForm.get("password")?.touched &&
+                loginForm.get("password")?.hasError("minlength")
+            ) {
+                <mat-error class="field-error">
+                    <mat-icon
+                        aria-hidden="false"
+                        aria-label="error icon"
+                        fontIcon="error_outline"
+                        style="font-size: 0.875rem"
+                    ></mat-icon>
+                    Password must be at least 6 characters
+                </mat-error>
+            }
+        </mat-form-field>
+
+        <!-- Action section -->
+        <div
+            style="
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 1.25rem;
+            "
+        >
+            <button
+                mat-flat-button
+                type="submit"
+                [disabled]="isSubmitting()"
+                style="flex: 1; padding-block: 1.375rem"
+            >
+                {{ isSubmitting() ? "Logging in..." : "Login" }}
+            </button>
+        </div>
+        <p style="text-align: center">
+            Don't have an account? <a routerLink="/signup" class="auth-link" style="color: var(--primary)">Sign Up</a>
+        </p>
+    </form>
+</div>

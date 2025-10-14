@@ -1,0 +1,33 @@
+<nav
+    style="
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 1.25rem;
+        background-color: rgba(255, 255, 255, 0.05);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    "
+>
+    <img src="assets/logo.svg" alt="Logo" style="max-width: 9rem; cursor: pointer" routerLink="/" />
+    <app-date-time />
+    <div class="right-side" style="display: flex; align-items: center; gap: 1rem">
+        @if (isLoggedIn()) {
+        <button matIconButton [matMenuTriggerFor]="menu" aria-label="avatar-menu">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item disabled>
+                <mat-icon>account_circle</mat-icon>
+                <span>{{ userInfo?.email}}</span>
+            </button>
+            <button mat-menu-item (click)="handleLogout()" [disabled]="isSubmitting()">
+                <mat-icon>logout</mat-icon>
+                <span>Logout</span>
+            </button>
+        </mat-menu>
+        } @else {
+            <button mat-stroked-button routerLink="/login">Login</button>
+        }
+        <app-toggle-theme />
+    </div>
+</nav>

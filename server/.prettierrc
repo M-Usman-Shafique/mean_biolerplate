@@ -1,0 +1,8 @@
+{
+    "tabWidth": 4,
+    "singleQuote": false,
+    "trailingComma": "es5",
+    "printWidth": 100,
+    "htmlWhitespaceSensitivity": "strict",
+    "plugins": ["prettier-plugin-ejs"]
+}

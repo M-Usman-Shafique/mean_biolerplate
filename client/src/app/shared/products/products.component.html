@@ -1,0 +1,79 @@
+  <div
+    style="
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      width: 100%;
+      max-width: 1200px;
+    "
+  >
+    @for (product of products; track product.id) {
+    <div
+      style="
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 10px;
+        width: 220px;
+        padding: 20px;
+        border-radius: 12px;
+        background-color: var(--surface-container);
+      "
+    >
+      <img
+        [src]="product.image"
+        alt="{{ product.title }}"
+        style="
+          width: 220px;
+          height: 170px;
+          object-fit: cover;
+          border-radius: 8px;
+        "
+      />
+
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%;">
+        <h2
+        style="
+          font-size: 1.1rem;
+          font-weight: 600;
+          text-align: center;
+          margin: 5px 0;
+          text-wrap: nowrap;
+        "
+      >
+        {{ product.title }}
+      </h2>
+      <p
+        style="
+          font-size: 1rem;
+          font-weight: 500;
+          color: var(--on-surface);
+          margin: 0;
+        "
+      >
+        ${{ product.price }}
+      </p>
+      </div>
+
+      <div style="display: flex; align-items: center; justify-content: center; width: 100%; min-height: 60px;">
+        @if (getCartItemQuantity(product.id) | async; as quantity) {
+          @if (quantity > 0) {
+            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+              <button mat-mini-fab (click)="decreaseQuantity(product)">
+                <mat-icon>remove</mat-icon>
+              </button>
+              <h3 style="font-weight: bold;">{{ quantity }}</h3>
+              <button mat-mini-fab (click)="increaseQuantity(product)">
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+          }
+        } @else {
+          <button mat-flat-button (click)="addProductToCart(product)" style="text-wrap: nowrap; align-self: center;">ADD</button>
+        }
+      </div>
+    </div>
+    }
+  </div>
+

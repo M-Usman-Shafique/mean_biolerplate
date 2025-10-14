@@ -1,65 +1,155 @@
-# Client
+# 🚀 Angular Material Boilerplate
 
-## Styles
+A production-ready **Angulat Material (v20+)** boilerplate designed for fast, secure, and scalable single-page application (SPA) development.
 
-- By default tailwindcss classes have low priority as compared to default material styling. You can use a "!" sign before tailwindcss classes to give them high priority.
-Example: class="!flex items-center justify-center"
-- Style Aliases
+## 🧩 Features
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.0.0.
+- **ESLint + Prettier** — Linting and code formatting standards  
+- **System, Light and Dark** — Seamless adaptive theme switching  
+- **Role-based JWT Auth** — Secure login with access & refresh tokens (HTTP-only cookies)  
+- **NgRx Store** — Robust and predictable state management  
+- **Angular Routing + Lazy Loading**  
+- **Utility Libraries:** — Loadash and Day.js  
+- **WebSockets (Socket.io)** — Real-time event communication  
+- **Environment-based config** — Simple `.env` management  
+- **Scalable project structure** — Clean and modular architecture  
 
-## Development server
+🛠️ Generated using <a href="https://github.com/angular/angular-cli" target="_blank">Angular CLI</a> version **20.0.0**
 
-To start a local development server, run:
+---
 
-```bash
-ng serve
+## 📁 Project Structure  
+src/  
+├── app/  
+│   ├── auth/  
+│   ├── config/    
+│   ├── core/  
+│   ├── features/    
+│   ├── layout/  
+│   ├── shared/    
+│   ├── store/  
+│   ├── theme/  
+├── assets/  
+├── environments/  
+└── main.ts  
+
+---
+
+## 🎨 Theme Customization
+Customize the Material design theme using the official Angular Material <a href="https://themes.angular-material.dev/colors" target="_blank">ThemeBuilder</a>
+
+**Steps:**
+1. Adjust the color palette to match your brand.  
+2. Click **"Export Theme"** (bottom-left corner).  
+3. Copy the generated CSS variables.  
+4. ThemeBuilder provides separate definitions for Light and Dark themes, e.g.:
+   ```css
+   /* Light Theme */
+   --mat-sys-primary: #235fa3;
+   --mat-sys-on-primary: #ffffff;
+
+
+
+   /* Dark Theme */
+   --mat-sys-primary: #a5c8ff;
+   --mat-sys-on-primary: #00315e;
+5. Merge them manually (or ask GPT) to generate combo variables:
+```css
+    --mat-sys-primary: light-dark(#235fa3, #a5c8ff);
+    --mat-sys-on-primary: light-dark(#ffffff, #00315e);
 ```
+6. Paste the generated combo variables into ``theme/_combo.scss`` file
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+---
 
-## Code scaffolding
+## 🧭 Routing Configuration
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+The app uses a **layout-based routing structure** defined in `app.routes.ts`.
+
+### Layouts
+
+#### 1. Auth Layout
+- For authentication-related routes (e.g., `/login`, `/signup`)
+- Accessible only by unauthenticated users
+
+#### 2. Main Layout
+- For protected routes (e.g., `/dashboard`, `/profile`)
+- Accessible only by authenticated users
+
+#### 3. Public Routes
+- Any route declared outside the above layouts  
+- Accessible by all users
+
+---
+
+## 🧱 Code scaffolding
+
+Generate a new component using Angular CLI:
 
 ```bash
 ng generate component component-name
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+For more schematics (components, directives, pipes, etc.), run:
 
 ```bash
 ng generate --help
 ```
 
-## Building
-
-To build the project run:
+## ⚙️ Installation
+Install dependencies using the legacy peer dependency flag to avoid version conflicts:
 
 ```bash
-ng build
+npm install --legacy-peer-deps
+```
+
+## 🧑‍💻 Development
+
+Start the local dev server without **Websocket** support, run:
+
+```bash
+npm run dev
+```
+
+Start with **Websocket** support, run:
+
+```bash
+npm run dev:websocket
+```
+
+Once the server is running, open your browser and navigate to `http://localhost:4200`. The application will automatically reload whenever you modify any of the source files.
+
+## 🏗️ Building
+Build the project for production:
+
+```bash
+npm run build
 ```
 
 This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
 
-## Running unit tests
+## 🧪 Running Unit Tests
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
+Execute unit tests using [Karma](https://karma-runner.github.io):
 
 ```bash
-ng e2e
+npm run test
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## 🧩 TypeScript Type Checking
 
-## Additional Resources
+```bash
+npm run ts-check
+```
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## 💡 Lint Checking
+
+```bash
+npm run lint
+```
+
+## 📏 Prettier Format Checking
+
+```bash
+npm run format
+```
