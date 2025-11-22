@@ -15,6 +15,8 @@ const config: Config = {
             },
         ],
     },
+    clearMocks: true,
+    restoreMocks: true,
 };
 
 export default config;
